@@ -38,11 +38,11 @@
     RewriteRule ^admin/([^/]+)/?$ admin.php?action=$1 [QSA,L]
 
     # -------------------------------------------------
-    # LICENSE ROUTES
+    # COMMAND ROUTES
     # /c/, /c/bfd6696cd9833474673d57bc4a6a4513
     # -------------------------------------------------
-    RewriteRule ^c/?$ license.php [QSA,L]
-    RewriteRule ^c/([^/]+)/?$ license.php?key=$1 [QSA,L]
+    RewriteRule ^c/?$ command.php [QSA,L]
+    RewriteRule ^c/([^/]+)/?$ command.php?key=$1 [QSA,L]
     
 </IfModule>
 
