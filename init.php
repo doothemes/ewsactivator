@@ -8,7 +8,7 @@
 // Establecer la zona horaria
 date_default_timezone_set('America/Lima');
 // Establecer version
-define('EWS_VERSION', '1.0.7');
+define('EWS_VERSION', '1.0.8');
 // Clave pública y privada para cifrado/descifrado
 define('EWS_INSURANCE_CHAIN_PUBLIC', 'JPeW3YEuX7vPCDvKMbbnCPhvJsebn3NxwL9Dh61c8obg0Pd8Ciav7cXkRktFT66K');
 define('EWS_INSURANCE_CHAIN_PRIVATE', 'GBxMAGZ3mT85dAdZzmCbe7dLUUk6EDp7b24Qa7iJdhxj7BeE54rGb3edgBqBjXrp');
@@ -40,6 +40,13 @@ define('EWS_SMTP_PASSWORD', 'oom3103AbZBEvHNlHzb44AjGN2RU+Ib8tZDd5xXRMNWykWrillF
 define('EWS_SMTP_ENCRYPTION', 'tls');
 define('EWS_SMTP_FROM_EMAIL', 'isp@ews.pe');
 define('EWS_SMTP_FROM_NAME', 'EWS Networks');
+
+// PocketBase Config
+define('EWS_POCKETBASE_PORT', 8090);
+define('EWS_POCKETBASE_LOCAL', '127.0.0.1');
+define('EWS_POCKETBASE_API_URL', 'https://pb.ews.pe/');
+define('EWS_POCKETBASE_API_USERNAME', 'uQdLI7fsDu+8MAH53m9tr6sdKbDHiIEHEH036Nnop+4=');
+define('EWS_POCKETBASE_API_PASSWORD', 'losmpZFw8+MXArXtMLiwVINnaeveCR/KjIWttRNHAHg=');
 
 // Cargar Composer autoload si existe
 require_once EWS_INCLUDES_PATH . '/PHPMailer/Exception.php';

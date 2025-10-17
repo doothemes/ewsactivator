@@ -7,9 +7,17 @@
  * @version 2.0
  */
 
- 
 // Inicializar la respuesta como texto plano 
 header('Content-Type: text/plain; charset=utf-8');
+
+// Obtener User-Agent de la solicitud
+$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+
+// Filtrar User-Agent para permitir solo PowerShell
+if(stripos($user_agent, 'PowerShell') === false){
+    http_response_code(403);
+    exit('error/forbidden');
+}
 
 // Incluir archivo de inicialización
 require_once __DIR__ . '/init.php';

@@ -1,5 +1,5 @@
 {
-    "short_name": "EWS Activator",
+    "short_name": "EWSActivator",
     "name": "EWSActivator",
     "description": "Gestiona la activacion de licencias de productos digitales..",
     "start_url": "../../?auth-application-nocache",

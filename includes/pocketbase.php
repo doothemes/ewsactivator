@@ -13,13 +13,13 @@ class PocketBase{
      */
     public function __construct(){
         // Credenciales seguras para autenticación
-        $this->api_identity = 'uQdLI7fsDu+8MAH53m9tr6sdKbDHiIEHEH036Nnop+4=';
-        $this->api_password = 'losmpZFw8+MXArXtMLiwVINnaeveCR/KjIWttRNHAHg=';
+        $this->api_identity = EWS_POCKETBASE_API_USERNAME;
+        $this->api_password = EWS_POCKETBASE_API_PASSWORD;
         // Determinar URL base según disponibilidad local
-        if($this->is_port_open("127.0.0.1", 8090)){
-            $this->url = "http://127.0.0.1:8090"; // Usar conexión local si está disponible
+        if($this->is_port_open(EWS_POCKETBASE_LOCAL, EWS_POCKETBASE_PORT)){
+            $this->url = 'http://'.EWS_POCKETBASE_LOCAL.':'.EWS_POCKETBASE_PORT; // Usar conexión local si está disponible
         } else {
-            $this->url = "https://pb.ews.pe"; // Usar URL pública
+            $this->url = EWS_POCKETBASE_API_URL; // Usar URL pública
         }
     }
 
