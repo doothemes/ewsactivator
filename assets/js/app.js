@@ -1,0 +1,266 @@
+(function($){
+
+    // EWS namespace
+    var EWS = {};
+
+    $(document).ready(function(){
+        EWS.AuthLogin();
+        EWS.AuthRecoveryPassword();
+    });
+
+
+    EWS.AuthLogin = function(){
+
+        $(document).on("click", ".toggle-password", function () {
+            const $btn = $(this);
+            const $icon = $btn.find("i");
+            const $idata = $btn.data("input");
+            const $input = $("#"+$idata);
+        
+            if ($input.attr("type") === "password") {
+                // Mostrar contraseña
+                $input.attr("type", "text");
+                $icon.text("visibility");
+                $btn.attr("aria-label", "Ocultar contraseña");
+            } else {
+                // Ocultar contraseña
+                $input.attr("type", "password");
+                $icon.text("visibility_off");
+                $btn.attr("aria-label", "Mostrar contraseña");
+            }
+        
+            // Efecto visual rápido al presionar
+            $btn.addClass("active");
+            setTimeout(() => $btn.removeClass("active"), 150);
+        });
+        
+
+        $(document).on("submit", "#ews-auth-login", function (e){
+            
+            e.preventDefault();
+            var AuthTimer;
+            var AuthBtnTimer;
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const ButtonText = Button.text();
+            const MessageText = $("#auth-message").text();
+            const InputUsername = form.find("#input-username").val();
+            const InputPassword = form.find("#input-password").val();
+
+            
+
+            form.find(".shake").removeClass("shake");
+            form.find(".jump").removeClass("jump");
+            Button.prop('disabled', true).text('Procesando..');
+
+            if(!InputUsername || !InputPassword){
+                $("#auth-credentials").addClass("shake");
+                clearTimeout(AuthTimer);
+                AuthTimer = setTimeout(function(){
+                    Button.prop('disabled', false).text(ButtonText);
+                }, 500);
+                return;
+            }else{
+                $.ajax({
+                    url: ews_app.ajax_url+"auth_login",
+                    type: "POST",
+                    dataType: "json",
+                    data: form.serialize()
+                }).done(function(response){
+                    if(response.success == true){
+                        window.location.href = ews_app.base_url+"admin/dashboard";
+                    }
+                }).fail(function(jqXHR, textStatus, errorThrown){
+                    let msg = 'Error desconocido.';
+                    let fld = false;
+                    try {
+                        const json = JSON.parse(jqXHR.responseText);
+                        msg = json.message || json.error || msg;
+                        fld = json.field;
+                    } catch(e) {
+                        msg = jqXHR.responseText || errorThrown || textStatus;
+                    }
+                    if(fld != false){
+                        $("#auth-"+fld).addClass("shake").find("input").focus();
+                    }else{
+                        $("#auth-credentials").addClass("shake");
+                    }
+    
+                    $("#auth-message").addClass("jump").text(msg);
+
+                    clearTimeout(AuthTimer);
+                    AuthTimer = setTimeout(function(){
+                        $("#auth-message").removeClass("jump").text(MessageText);
+                    }, 2500);
+    
+                }).always(function(){
+                    clearTimeout(AuthBtnTimer);
+                    AuthBtnTimer = setTimeout(function(){
+                        Button.prop('disabled', false).text(ButtonText);
+                    }, 2500);
+                });
+    
+            }
+            return false;
+        });
+    }
+
+
+
+
+
+    EWS.AuthRecoveryPassword = function(){
+        // Elementos principales del flujo
+        var $WrapRecoverPass = $("#auth-recover-password");
+        var $WrapValidateOTP = $("#auth-validate-otp");
+        var $WrapUpdatePass = $("#auth-update-password");
+        var $GetOTPCode = new URLSearchParams(window.location.search).get("otp");
+        var $GetUsername = new URLSearchParams(window.location.search).get("username");
+        // Si se recibe el nombre de usuario por URL, rellenar el campo
+        if($GetUsername){
+            $("#input-username").val($GetUsername);
+            $("#auth-password").addClass("jump").find("input").focus();
+        }
+        // Si se recibe el código OTP por URL, ir directamente a la validación
+        if($GetOTPCode){
+            $WrapRecoverPass.addClass("hidden");
+            $WrapUpdatePass.addClass("hidden");
+            $WrapValidateOTP.removeClass("hidden");
+        }
+        // Iniciar Proceso, este manejador genera un código OTP y lo envía al usuario
+        $(document).on("submit", "#ews-auth-recover-password", function (e){
+            e.preventDefault();
+            var FormTimer;
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const ButtonText = Button.text();
+            const NoticeDiv = form.find(".message");
+            const NoticeText = NoticeDiv.text();
+            $("#auth-username").removeClass("shake");
+            Button.prop('disabled', true).text('Procesando..');
+            $.ajax({
+                url: ews_app.ajax_url+"auth_recover_password",
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function(response){
+                    if(response.success == true){
+                        // Continuar al siguiente paso
+                        $WrapRecoverPass.addClass("hidden");
+                        $WrapValidateOTP.removeClass("hidden").addClass("jump");
+                        // Establecer Campos ocultos
+                        $(".hidden-username").val(response.data.username);
+                        $(".hidden-userkey").val(response.data.userkey);
+                        // Almacenar en localStorage
+                        localStorage.setItem("auth_username", response.data.username);
+                        localStorage.setItem("auth_userkey", response.data.userkey);
+
+                    }else{
+                        // Animar campo con error
+                        $("#auth-username").addClass("shake").find("input").focus();
+                        // Mostrar mensaje de error
+                        NoticeDiv.text(response.message);
+                        // Reestablecer estado del formulario
+                        clearTimeout(FormTimer);
+                        FormTimer = setTimeout(function(){
+                            // Reestablecer mensaje
+                            NoticeDiv.text(NoticeText);
+                            // Reestablecer botón
+                            Button.prop('disabled', false).text(ButtonText);
+                        }, 2500);
+                    }
+                }
+            });
+            return false;
+        });
+
+        // Este manejador valida el código OTP ingresado por el usuario
+        $(document).on("submit", "#ews-auth-validate-otp", function (e){
+            e.preventDefault();
+            var FormTimer;
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const ButtonText = Button.text();
+            const NoticeDiv = form.find(".message");
+            const NoticeText = NoticeDiv.text();
+            const UserName = localStorage.getItem("auth_username");
+            const UserKey = localStorage.getItem("auth_userkey");
+            $("#auth-otp").removeClass("shake");
+            Button.prop('disabled', true).text('Procesando..');
+            $.ajax({
+                url: ews_app.ajax_url+"auth_validate_otp",
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function(response){
+                    if(response.success == true){
+                        // Continuar al siguiente paso
+                        $WrapValidateOTP.addClass("hidden");
+                        $WrapUpdatePass.removeClass("hidden").addClass("jump");
+                    }else{
+                        // Animar campo con error                           
+                        $("#auth-otp").addClass("shake").find("input").focus();
+                        // Mostrar mensaje de error
+                        NoticeDiv.text(response.message);
+                        // Reestablecer estado del formulario
+                        clearTimeout(FormTimer);
+                        FormTimer = setTimeout(function(){
+                            // Reestablecer mensaje
+                            NoticeDiv.text(NoticeText);
+                            // Reestablecer botón
+                            Button.prop('disabled', false).text(ButtonText);
+                        }, 2500);
+                    }
+                }
+            });
+            return false;
+        });
+
+        // Completar el proceso de recuperación de contraseña
+        $(document).on("submit", "#ews-auth-update-password", function (e){
+            e.preventDefault();
+            var FormTimer;
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const ButtonText = Button.text();
+            const NoticeDiv = form.find(".message");
+            const NoticeText = NoticeDiv.text();
+            const UserName = localStorage.getItem("auth_username");
+            $("#auth-password1").removeClass("shake");
+            $("#auth-password2").removeClass("shake");
+            Button.prop('disabled', true).text('Procesando..');
+            $.ajax({
+                url: ews_app.ajax_url+"auth_change_password",
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function(response){
+                    if(response.success == true){
+                        // Restablecer localStorage
+                        localStorage.removeItem("auth_username");
+                        localStorage.removeItem("auth_userkey");
+                        // Redirigir al login con mensaje de éxito
+                        window.location.href = ews_app.base_url+`auth/login?reset=success&username=${UserName}`;
+                    }else{
+                        // Animar campo con error
+                        $("#auth-password1").addClass("shake").find("input").focus();
+                        $("#auth-password2").addClass("shake").find("input").focus();
+                        // Mostrar mensaje de error
+                        NoticeDiv.text(response.message);
+                        // Reestablecer estado del formulario
+                        clearTimeout(FormTimer);
+                        FormTimer = setTimeout(function(){
+                            // Reestablecer mensaje
+                            NoticeDiv.text(NoticeText);
+                            // Reestablecer botón
+                            Button.prop('disabled', false).text(ButtonText);
+                        }, 2500);
+                    }
+                }
+            });
+            return false;
+        });
+    }
+
+
+})(jQuery);

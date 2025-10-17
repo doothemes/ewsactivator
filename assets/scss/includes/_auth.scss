@@ -1,0 +1,112 @@
+main.auth-wrap{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    .inside{
+        margin: 0 auto;
+        width: 560px;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--ews-background-transparent);
+        border-radius: var(--ews-border-radius);
+        padding: 3rem 5rem;
+        h1.title{
+            font-size: 2rem;
+            font-weight: 700;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            span{
+                color: var(--ews-text-hover);
+                font-weight: 600;
+            }
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            section{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1rem;
+                &.submit-box{
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    button{
+                        min-width: 150px;
+                    }
+                }
+                &:last-child{
+                    margin-bottom: 0;
+                }
+                div.message{
+                    font-size: .85rem;
+                    line-height: 1.3;
+                    color: var(--ews-text-secondary);
+                    margin-bottom: .5rem;
+                    padding-bottom: 1rem;
+                    border-bottom: dashed 1px var(--ews-background-elevated);
+                }
+                fieldset.field{
+                    width: 100%;
+                    border: 0;
+                    margin: 0 0 1.5rem;
+                    padding: 0;
+                    position: relative;
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+                    i.icon{
+                        position: absolute;
+                        top: 14px;
+                        left: 14px;
+                        color: var(--ews-text-icon);
+                    }
+                    button.toggle-password{
+                        color: var(--ews-text-icon);
+                        background-color: rgba(0, 0, 0, 0);
+                        padding: 0;
+                        margin: 0;
+                        border: 0;
+                        position: absolute;
+                        right: 14px;
+                        top: 14px;
+                        cursor: pointer;
+                        &:hover{
+                            color: var(--ews-text-hover);
+                        }
+                    }
+                    input.otp{
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        letter-spacing: .7rem;
+                    }
+                    input[type="text"],
+                    input[type="number"],
+                    input[type="email"],
+                    input[type="password"]{
+                        width: 100%;
+                        padding: 0 15px 0 50px;
+                        background-color: var(--ews-background-paper);
+                        border: 2px solid var(--ews-background-paper);
+                        border-radius: var(--ews-border-radius);
+                        height: 55px;
+                        &:focus{
+                            border-color: var(--ews-text-hover);
+                            outline: none;
+                        }
+                        &::placeholder{
+                            color: var(--ews-text-disabled);
+                            text-align: left;
+                            font-size: 1rem;
+                            letter-spacing: normal;
+                            font-weight: normal;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

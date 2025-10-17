@@ -1,0 +1,19 @@
+:root{
+    color-scheme: dark;
+    --ews-background-default: #000000;
+    --ews-background-elevated: #424242;
+    --ews-background-paper: #121212;
+    --ews-background-transparent: rgba(30, 30, 30, 0.4);
+
+    --ews-border-default: rgba(250, 250, 250, 0.12);
+    --ews-border-hover: rgba(250, 250, 250, 0.24);
+
+    --ews-text-primary: #fafafa;
+    --ews-text-secondary: rgba(250, 250, 250, 0.7);
+    --ews-text-disabled: rgba(250, 250, 250, 0.38);
+    --ews-text-icon: rgba(255, 255, 255, 0.5);
+    --ews-text-hover: #ffffff;
+
+    --ews-width-container: 850px;
+    --ews-border-radius: .5rem;
+}

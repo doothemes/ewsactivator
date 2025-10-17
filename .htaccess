@@ -1,0 +1,52 @@
+# ============================================================
+# Main Rewrite Rules - Clean URLs & Custom 404 Handling
+# Author: Erick Meza
+# Date: 2025-10-14
+# ============================================================
+
+<IfModule mod_rewrite.c>
+
+    # Enable URL rewriting
+    RewriteEngine On
+    RewriteBase /
+
+    # -------------------------------------------------
+    # Skip rewriting if request targets an existing file or directory
+    # -------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # -------------------------------------------------
+    # AJAX ROUTES
+    # /ajax/, /ajax/getData, /ajax/postData
+    # -------------------------------------------------
+    RewriteRule ^ajax/?$ ajax.php [QSA,L]
+    RewriteRule ^ajax/([^/]+)/?$ ajax.php?action=$1 [QSA,L]
+
+    # -------------------------------------------------
+    # AUTH ROUTES
+    # /auth/, /auth/login, /auth/logout, /auth/register
+    # -------------------------------------------------
+    RewriteRule ^auth/?$ auth.php [QSA,L]
+    RewriteRule ^auth/([^/]+)/?$ auth.php?action=$1 [QSA,L]
+
+    # -------------------------------------------------
+    # ADMIN ROUTES
+    # /admin/, /admin/dashboard, /admin/users
+    # -------------------------------------------------
+    RewriteRule ^admin/?$ admin.php [QSA,L]
+    RewriteRule ^admin/([^/]+)/?$ admin.php?action=$1 [QSA,L]
+
+    # -------------------------------------------------
+    # LICENSE ROUTES
+    # /c/, /c/bfd6696cd9833474673d57bc4a6a4513
+    # -------------------------------------------------
+    RewriteRule ^c/?$ license.php [QSA,L]
+    RewriteRule ^c/([^/]+)/?$ license.php?key=$1 [QSA,L]
+    
+</IfModule>
+
+# -------------------------------------------------
+# Custom 404 Page
+# -------------------------------------------------
+ErrorDocument 404 /404.php

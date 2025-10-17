@@ -1,0 +1,35 @@
+.button{
+    width: auto;
+    font-weight: 600;
+    padding: 10px 25px;
+    font-size: 1rem;
+    border-radius: var(--ews-border-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    i.icon{
+        &:first-child{
+            margin-right: 5px;
+        }
+        &:last-child{
+            margin-left: 5px;
+        }
+    }
+    &.button-primary{
+        background-color: #fff;
+        border-color: #fff;
+        color: #111;
+        transition: all .3s ease;
+        &:hover{
+            background-color: #f0f0f0;
+            border-color: #f0f0f0;
+            color: #111;
+        }
+        &:disabled{
+            color: rgba(17, 17, 17, 0.7);
+            cursor: default;
+        }
+    }
+}
