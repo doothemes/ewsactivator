@@ -13,6 +13,13 @@
     <title><?=$title;?></title>
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <link rel="manifest" href="/assets/web/manifest.json?v=<?=EWS_VERSION;?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="/assets/icons/favicon_192.png?v=<?=EWS_VERSION;?>">
+    <link rel="apple-touch-icon" sizes="256x256" href="/assets/icons/favicon_256.png?v=<?=EWS_VERSION;?>">
+    <link rel="apple-touch-icon" sizes="512x512" href="/assets/icons/favicon_512.png?v=<?=EWS_VERSION;?>">
+    <link rel="icon" type="image/png" sizes="64x64" href="/assets/icons/favicon_64.png?v=<?=EWS_VERSION;?>">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/favicon_48.png?v=<?=EWS_VERSION;?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon_32.png?v=<?=EWS_VERSION;?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon_16.png?v=<?=EWS_VERSION;?>">
     <link rel="stylesheet" id="ews-activator-app-style" href="/assets/css/app.css?ver=<?=EWS_VERSION;?>" type="text/css" media="all" />
     <script type="text/javascript" src="/assets/js/jquery.js?ver=3.7.1" id="jquery-core-js"></script>
     <script type="text/javascript" src="/assets/js/app.js?ver=<?=EWS_VERSION;?>" id="ews-activator-app-core-js"></script>
