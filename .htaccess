@@ -43,6 +43,13 @@
     # -------------------------------------------------
     RewriteRule ^c/?$ command.php [QSA,L]
     RewriteRule ^c/([^/]+)/?$ command.php?key=$1 [QSA,L]
+
+    # -------------------------------------------------
+    # VIEW ROUTES
+    # /v/, /v/bfd6696cd9833474673d57bc4a6a4513
+    # -------------------------------------------------
+    RewriteRule ^v/?$ view.php [QSA,L]
+    RewriteRule ^v/([^/]+)/?$ view.php?key=$1 [QSA,L]
     
 </IfModule>
 

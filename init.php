@@ -4,7 +4,6 @@
  * Configuraciones generales, constantes y carga de dependencias
  */
 
-
 // Establecer la zona horaria
 date_default_timezone_set('America/Lima');
 // Establecer version
@@ -54,6 +53,6 @@ require_once EWS_INCLUDES_PATH . '/PHPMailer/PHPMailer.php';
 require_once EWS_INCLUDES_PATH . '/PHPMailer/SMTP.php';
 
 // Incluir archivos necesarios
-require_once EWS_INCLUDES_PATH . '/functions.php';
-require_once EWS_INCLUDES_PATH . '/httpclient.php';
+require_once EWS_INCLUDES_PATH . '/functions.php'; 
+require_once EWS_INCLUDES_PATH . '/httpclient.php'; 
 require_once EWS_INCLUDES_PATH . '/pocketbase.php';
