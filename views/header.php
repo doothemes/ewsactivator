@@ -12,10 +12,10 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
     <title><?=$title;?></title>
     <link rel="profile" href="https://gmpg.org/xfn/11">
-    <link rel="manifest" href="/assets/web/manifest.json?v=1.0.3">
-    <link rel="stylesheet" id="ews-activator-app-style" href="/assets/css/app.css?ver=2.8.3" type="text/css" media="all" />
-    <script type="text/javascript" src="/assets/js/jquery.js?ver=3.6.0" id="jquery-core-js"></script>
-    <script type="text/javascript" src="/assets/js/app.js?ver=2.8.3" id="ews-activator-app-core-js"></script>
+    <link rel="manifest" href="/assets/web/manifest.json?v=<?=EWS_VERSION;?>">
+    <link rel="stylesheet" id="ews-activator-app-style" href="/assets/css/app.css?ver=<?=EWS_VERSION;?>" type="text/css" media="all" />
+    <script type="text/javascript" src="/assets/js/jquery.js?ver=3.7.1" id="jquery-core-js"></script>
+    <script type="text/javascript" src="/assets/js/app.js?ver=<?=EWS_VERSION;?>" id="ews-activator-app-core-js"></script>
     <script type="text/javascript" id="ews-activator-app-extra">
         // EWS Activator Application Configuration
         var ews_app = {
