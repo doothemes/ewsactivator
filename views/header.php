@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es-ES">
+<html id="EWSActivator" lang="es-ES">
 <head>
     <meta charset="utf-8">
     <meta name="robots" content="noindex">
@@ -13,6 +13,7 @@
     <title><?=$title;?></title>
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <link rel="manifest" href="/assets/web/manifest.json?v=<?=EWS_VERSION;?>">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="192x192" href="/assets/icons/favicon_192.png?v=<?=EWS_VERSION;?>">
     <link rel="apple-touch-icon" sizes="256x256" href="/assets/icons/favicon_256.png?v=<?=EWS_VERSION;?>">
     <link rel="apple-touch-icon" sizes="512x512" href="/assets/icons/favicon_512.png?v=<?=EWS_VERSION;?>">
@@ -30,8 +31,22 @@
             "ajax_url" : "/ajax/",
         };
         // Prevent caching of AJAX requests
-        $(document).ready(function () {});
+        $(document).ready(function(){
+            const savedTab = localStorage.getItem("admin_active_tab") ?? "resgister";
+            $("#target-"+savedTab).trigger("click");
+        });
     </script>
 </head>
-<body class="<?=$bodyclass;?>">
-    <div class="wrap">
+<body class="<?=$bodyclass;?> onload">
+    <script type="text/javascript" id="ewsgestion-app-onload">
+        window.addEventListener("load", function () {
+            setTimeout(function(){
+                document.body.classList.remove("onload");
+                const appWrap = document.getElementById("app-wrap");
+                if (appWrap) {
+                    appWrap.classList.remove("hidden");
+                }
+            }, 700);
+        });
+    </script>
+    <div id="app-wrap" class="wrap hidden">

@@ -1,0 +1,88 @@
+main.admin-wrap{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    header.navigator{
+        margin: 1rem 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .left{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .logo{
+                margin: 0 15px 0 0;
+                img{
+                    float: left;
+                    width: 22px;
+                    height: 22px;
+                }
+            }
+            .subtitle{
+                h1{
+                    font-size: 1.3rem;
+                    font-weight: normal;
+                }
+            }
+        }
+        .center{
+            ul.menu{
+                list-style: none;
+                li{
+                    display: inline-flex;
+                    margin: 0 .3rem;
+                    a{
+                        color: var(--ews-text-icon);
+                        padding: .2rem 0;
+                        text-transform: uppercase;
+                        font-size: .85rem;
+                        font-weight: 700;
+                        border-bottom: solid 3px rgba(0, 0, 0, 0);
+                        &.on{
+                            border-color: var(--ews-text-primary);
+                        }
+                        &:hover{
+                            color: var(--ews-text-primary);
+                        }
+                    }
+                }
+            }
+        }
+        .right{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .profile{
+                h3{
+                    font-size: 1.3rem;
+                    font-weight: normal;
+                }
+            }
+            .control{
+                margin-left: 15px;
+                a{
+                    font-size: .95rem;
+                    padding: .3rem 1rem;
+                    border: solid 1px var(--ews-border-default);
+                    border-radius: var(--ews-border-radius);
+                }
+            }
+        }
+    }
+    .inside{
+        display: flex;
+        flex-direction: column;
+        section.content{
+            width: 100%;
+            display: none;
+            &.on{
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    }
+}

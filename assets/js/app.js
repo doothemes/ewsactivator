@@ -6,10 +6,45 @@
     $(document).ready(function(){
         EWS.AuthLogin();
         EWS.AuthRecoveryPassword();
+        EWS.AdminTabs();
     });
+
+    EWS.AdminTabs = function(){
+        var $tabButtons = $(".tab");
+        var $tabContents = $(".content");
+        // Manejador de clic en los botones de pestañas
+        $(document).on("click", ".tab", function(e){
+            // Evitar comportamiento predeterminado
+            e.preventDefault();
+            // Obtener el objetivo de la pestaña seleccionada
+            var target = $(this).data("target");
+            // Guardar la pestaña seleccionada en localStorage
+            localStorage.setItem("admin_active_tab", target);
+            // Activar el botón de pestaña seleccionado
+            $tabButtons.removeClass("on");
+            $(this).addClass("on");
+            // Mostrar el contenido de la pestaña seleccionada
+            $tabContents.removeClass("on fadein");
+            $("#tab-"+target).addClass("on fadein");
+        });
+    };
 
 
     EWS.AuthLogin = function(){
+
+        $(document).on("click", ".auth-logout-link", function (e){
+            e.preventDefault();
+            $.ajax({
+                url: ews_app.ajax_url+"auth_logout",
+                type: "POST",
+                dataType: "json"
+            }).done(function(response){
+                if(response.success == true){
+                    window.location.href = ews_app.base_url+"auth/login";
+                }
+            });
+            return false;
+        });
 
         $(document).on("click", ".toggle-password", function () {
             const $btn = $(this);
@@ -104,9 +139,6 @@
             return false;
         });
     }
-
-
-
 
 
     EWS.AuthRecoveryPassword = function(){

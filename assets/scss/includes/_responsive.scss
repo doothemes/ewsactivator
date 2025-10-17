@@ -1,5 +1,20 @@
 @media only screen and (max-width: 600px){
 
+    main.admin-wrap{
+        header.navigator{
+            .left{
+                .subtitle{
+                    display: none;
+                }
+            }
+            .right{
+                .profile{
+                    display: none;
+                }
+            }
+        }
+    }
+
     main.auth-wrap{
         height: 60vh;
         .inside{
