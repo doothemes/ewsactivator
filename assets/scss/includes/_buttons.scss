@@ -9,6 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    white-space: nowrap;
     i.icon{
         &:first-child{
             margin-right: 5px;

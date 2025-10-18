@@ -115,6 +115,14 @@
                     </fieldset>
                 </div>
             </div>
+            <div class="controls">
+                <div>
+                    <button class="button button-primary" type=submit id="register-submit">Registrar Licencia</button> 
+                </div>
+                <div>
+                    <p class="notice">Asegúrate de que todos los datos sean correctos. Si detectas algún error, comunícate con nosotros para actualizar la orden.</p>
+                </div>
+            </div>
         </section>
         <section id="tab-finder" class="content">{{finder}}</section>
         <section id="tab-settings" class="content">{{settings}}</section>

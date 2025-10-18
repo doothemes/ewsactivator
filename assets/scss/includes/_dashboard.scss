@@ -105,6 +105,19 @@ main.admin-wrap{
                     color: var(--ews-text-secondary);
                 }
             }
+            .controls{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 0 1rem;
+                p.notice{
+                    font-size: .85rem;
+                    line-height: 1.3;
+                    color: var(--ews-text-secondary);
+                }
+            }
             .group{
                 display: flex;
                 flex-direction: column;

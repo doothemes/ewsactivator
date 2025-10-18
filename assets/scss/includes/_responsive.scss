@@ -15,6 +15,16 @@
         }
         .inside{
             section.content{
+                .controls{
+                    flex-direction: column;
+                    padding: 2rem 1.5rem;
+                    div{
+                        width: 100%;
+                        button{
+                            width: 100%;
+                        }
+                    }
+                }
                 .group{
                     gap: 23px;
                     .fields{
