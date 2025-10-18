@@ -35,7 +35,10 @@
                 <p>Utilice el siguiente formulario para registrar una nueva licencia de producto de Microsoft.</p>
             </div>
             <div class="group">
-                <h3 class="title">Datos Personales</h3>
+                <div class="heading">
+                    <h3 class="title">Datos Personales</h3>
+                    <p class="desc">Ingresa el nombre completo del cliente para su correcta identificación en nuestros sistemas.</p>
+                </div>
                 <div class="fields">
                     <fieldset class="input">
                         <label for="field-name">Nombre</label>
@@ -48,7 +51,10 @@
                 </div>
             </div>
             <div class="group">
-                <h3 class="title">Detalles de contacto</h3>
+                <div class="heading">
+                    <h3 class="title">Detalles de contacto</h3>
+                    <p class="desc">Detalles de contacto necesarios para establecer comunicación con el cliente.</p>
+                </div>
                 <div class="fields">
                     <fieldset class="input">
                         <label for="field-email">Correo Electrónico</label>
@@ -61,8 +67,22 @@
                 </div>
             </div>
             <div class="group">
-                <h3 class="title">Detalles de Orden</h3>
-                <div class="fields">
+                <div class="heading">
+                    <h3 class="title">Detalles de Orden</h3>
+                    <p class="desc">Registra todos los detalles de la orden para facilitar su seguimiento en caso de ser requerido posteriormente.</p>
+                </div>
+                <div class="fields separator">
+                    <fieldset class="input">
+                        <label for="field-currency">Moneda</label>
+                        <select name="currency" id="field-currency">
+                            <option value="PEN">Sol Peruano</option>
+                            <option value="EUR">Euro</option>
+                            <option value="USD">Dolares Estado Unidendes</option>
+                            <option value="CHF">Franco Suizo</option>
+                            <option value="CLP">Peso Chileno</option>
+                            <option value="MXN">Peso Mexicano</option>
+                        </select>
+                    </fieldset>
                     <fieldset class="input">
                         <label for="field-payment">Precio de venta</label>
                         <input type="number" id="field-payment" name="payment" value="0" required>
@@ -71,9 +91,27 @@
                         <label for="field-expenditure">Precio de compra</label>
                         <input type="number" id="field-expenditure" name="expenditure" value="0">
                     </fieldset>
+                </div>
+                <div class="fields">
                     <fieldset class="input">
-                        <label for="field-activations">Limite de activaciones</label>
-                        <input type="number" id="field-activations" name="activations" value="10" required>
+                        <label for="field-payment-method">Método de pago</label>
+                        <select name="payment-method" id="field-payment-method">
+                            <option value="YAPE">Yape</option>
+                            <option value="PLIN">Plin</option>
+                            <option value="CASH">Efectivo</option>
+                            <option value="PAYPAL">PayPal</option>
+                            <option value="BT_BCP">Transferencia BCP</option>
+                            <option value="BT_BBVA">Transferencia BBVA</option>
+                            <option value="BT_INTERBANK">Transferencia Interbank</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="input">
+                        <label for="field-payment-description">Descripción del Pago</label>
+                        <input type="text" id="field-payment-description" name="payment-description" required>
+                    </fieldset>
+                    <fieldset class="input">
+                        <label for="field-limit-activations">Limite de activaciones</label>
+                        <input type="number" id="field-limit-activations" name="limit-activations" value="10">
                     </fieldset>
                 </div>
             </div>

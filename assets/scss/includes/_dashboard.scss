@@ -116,6 +116,11 @@ main.admin-wrap{
                     font-size: 1.1rem;
                     font-weight: normal;
                 }
+                p.desc{
+                    font-size: .85rem;
+                    line-height: 1.5;
+                    color: var(--ews-text-secondary);
+                }
                 .fields{
                     width: 100%;
                     display: flex;
@@ -123,6 +128,11 @@ main.admin-wrap{
                     align-items: center;
                     justify-content: center;
                     gap: 1rem;
+                    &.separator{
+                        border-bottom: dashed 1px var(--ews-border-hover);
+                        padding-bottom: 1.5rem;
+                        margin-bottom: 1.2rem;
+                    }
                     fieldset.input{
                         width: 100%;
                         margin: 0;
@@ -143,7 +153,8 @@ main.admin-wrap{
                         }
                         input[type="text"],
                         input[type="email"],
-                        input[type="number"]{
+                        input[type="number"],
+                        select{
                             height: 50px;
                             background-color: transparent;
                             border-radius: var(--ews-border-radius);
@@ -152,6 +163,21 @@ main.admin-wrap{
                             &:focus{
                                 outline: none;
                                 border-color: var(--ews-text-primary);
+                            }
+                        }
+                        select{
+                            height: 50px;
+                            background-color: transparent;
+                            border-radius: var(--ews-border-radius);
+                            border: solid 2px var(--ews-border-default);
+                            padding: 0 14px;
+                            &:focus{
+                                outline: none;
+                                border-color: var(--ews-text-primary);
+                            }
+                            option{
+                                background-color: var(--ews-background-paper);
+                                color: var(--ews-text-primary);
                             }
                         }
                     }
