@@ -7,7 +7,32 @@
         EWS.AuthLogin();
         EWS.AuthRecoveryPassword();
         EWS.AdminTabs();
+        EWS.AdminRegisterLicense();
     });
+
+    EWS.AdminRegisterLicense = function(){
+
+        $("#field-currency").on("change", function(){
+            const currency = $(this).val();
+            $(".currency-badge").text(currency);
+            localStorage.setItem("admin_currency_badge", currency);
+        });
+
+        $("#field-payment-method").on("change", function(){
+            const paymentMethod = $(this).val();
+            localStorage.setItem("admin_payment_method", paymentMethod);
+        });
+
+        $("#field-product-office").on("change", function(){
+            const paymentMethod = $(this).val();
+            localStorage.setItem("admin_product_office", paymentMethod);
+        });
+
+        $("#field-product-windows").on("change", function(){
+            const paymentMethod = $(this).val();
+            localStorage.setItem("admin_product_windows", paymentMethod);
+        });
+    }
 
     EWS.AdminTabs = function(){
         var $tabButtons = $(".tab");

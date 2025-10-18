@@ -32,8 +32,17 @@
         };
         // Prevent caching of AJAX requests
         $(document).ready(function(){
-            const savedTab = localStorage.getItem("admin_active_tab") ?? "resgister";
+            const productWindows = localStorage.getItem("admin_product_windows") ?? false;
+            const productOffice = localStorage.getItem("admin_product_office") ?? false;
+            const paymentMethod = localStorage.getItem("admin_payment_method") ?? "YAPE";
+            const currencyBadge = localStorage.getItem("admin_currency_badge") ?? "PEN";
+            const savedTab = localStorage.getItem("admin_active_tab") ?? "register";
             $("#target-"+savedTab).trigger("click");
+            $("#field-product-windows").val(productWindows);
+            $("#field-product-office").val(productOffice);
+            $("#field-currency").val(currencyBadge);
+            $("#field-payment-method").val(paymentMethod);
+            $(".currency-badge").text(currencyBadge);
         });
     </script>
 </head>

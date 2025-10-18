@@ -17,7 +17,7 @@
             section.content{
                 .controls{
                     flex-direction: column;
-                    padding: 2rem 1.5rem;
+                    padding: 1rem .5rem;
                     div{
                         width: 100%;
                         button{
@@ -26,6 +26,7 @@
                     }
                 }
                 .group{
+                    padding: 1.5rem;
                     gap: 23px;
                     .fields{
                         flex-direction: column;
