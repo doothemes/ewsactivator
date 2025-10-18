@@ -32,8 +32,8 @@
         };
         // Prevent caching of AJAX requests
         $(document).ready(function(){
-            const productWindows = localStorage.getItem("admin_product_windows") ?? false;
-            const productOffice = localStorage.getItem("admin_product_office") ?? false;
+            const productWindows = localStorage.getItem("admin_product_windows") ?? "";
+            const productOffice = localStorage.getItem("admin_product_office") ?? "";
             const paymentMethod = localStorage.getItem("admin_payment_method") ?? "YAPE";
             const currencyBadge = localStorage.getItem("admin_currency_badge") ?? "PEN";
             const savedTab = localStorage.getItem("admin_active_tab") ?? "register";
