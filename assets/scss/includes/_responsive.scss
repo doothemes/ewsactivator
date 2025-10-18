@@ -13,6 +13,17 @@
                 }
             }
         }
+        .inside{
+            section.content{
+                .group{
+                    gap: 23px;
+                    .fields{
+                        flex-direction: column;
+                        gap: 1.5rem;
+                    }
+                }
+            }
+        }
     }
 
     main.auth-wrap{

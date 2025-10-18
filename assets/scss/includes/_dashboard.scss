@@ -66,8 +66,16 @@ main.admin-wrap{
                 a{
                     font-size: .95rem;
                     padding: .3rem 1rem;
+                    color: var(--ews-text-icon);
                     border: solid 1px var(--ews-border-default);
                     border-radius: var(--ews-border-radius);
+                    background-color: var(--ews-background-paper);
+                    transition: all .3s ease;
+                    &:hover{
+                        color: var(--ews-text-hover);
+                        background-color: transparent;
+                        border-color: var(--ews-border-hover);
+                    }
                 }
             }
         }
@@ -82,6 +90,71 @@ main.admin-wrap{
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
+            }
+            .header{
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                h2{
+                    font-size: 1.3rem;
+                    font-weight: normal;
+                }
+                p{
+                    font-size: .85rem;
+                    line-height: 1.5;
+                    color: var(--ews-text-secondary);
+                }
+            }
+            .group{
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                padding: 1.5rem;
+                background-color: var(--ews-background-paper);
+                border-radius: var(--ews-border-radius);
+                h3.title{
+                    font-size: 1.1rem;
+                    font-weight: normal;
+                }
+                .fields{
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 1rem;
+                    fieldset.input{
+                        width: 100%;
+                        margin: 0;
+                        padding: 0;
+                        border: none;
+                        display: flex;
+                        flex-direction: column;
+                        background-color: transparent;
+                        position: relative;
+                        label{
+                            font-size: .85rem;
+                            color: var(--ews-text-secondary);
+                            position: absolute;
+                            top: -13px;
+                            left: 13px;
+                            background-color: var(--ews-background-paper);
+                            padding: 0 5px;
+                        }
+                        input[type="text"],
+                        input[type="email"]{
+                            height: 50px;
+                            background-color: transparent;
+                            border-radius: var(--ews-border-radius);
+                            border: solid 2px var(--ews-border-default);
+                            padding: 0 14px;
+                            &:focus{
+                                outline: none;
+                                border-color: var(--ews-text-primary);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
