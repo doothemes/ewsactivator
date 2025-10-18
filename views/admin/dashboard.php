@@ -62,6 +62,20 @@
             </div>
             <div class="group">
                 <h3 class="title">Detalles de Orden</h3>
+                <div class="fields">
+                    <fieldset class="input">
+                        <label for="field-payment">Precio de venta</label>
+                        <input type="number" id="field-payment" name="payment" value="0" required>
+                    </fieldset>
+                    <fieldset class="input">
+                        <label for="field-expenditure">Precio de compra</label>
+                        <input type="number" id="field-expenditure" name="expenditure" value="0">
+                    </fieldset>
+                    <fieldset class="input">
+                        <label for="field-activations">Limite de activaciones</label>
+                        <input type="number" id="field-activations" name="activations" value="10" required>
+                    </fieldset>
+                </div>
             </div>
         </section>
         <section id="tab-finder" class="content">{{finder}}</section>

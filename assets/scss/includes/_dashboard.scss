@@ -142,7 +142,8 @@ main.admin-wrap{
                             padding: 0 5px;
                         }
                         input[type="text"],
-                        input[type="email"]{
+                        input[type="email"],
+                        input[type="number"]{
                             height: 50px;
                             background-color: transparent;
                             border-radius: var(--ews-border-radius);
