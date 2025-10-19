@@ -19,7 +19,7 @@
         </div>
         <div class="right">
             <div class="profile">
-                <h3>Erick Meza</h3>
+                <h3><?= $_SESSION['ews_auth']['fullname'] ?? 'John Doe' ?></h3>
             </div>
             <div class="control">
                 <a href="#" class="auth-logout-link">Salir</a>
@@ -279,7 +279,7 @@
                         <button class="button button-secondary" type="reset" id="register-reset">Cancelar</button>
                     </div>
                     <div class="ntce">
-                        <p class="notice">Asegúrate de que todos los datos sean correctos. Si detectas algún error, comunícate con nosotros para actualizar la orden.</p>
+                        <p class="notice">Antes de "completar la orden" por favor, verifica que todos los campos estén correctamente completados antes de registrar los datos.</p>
                     </div>
                 </div>
                 <input id="field-subtotal" type="hidden" name="subtotal" value="0">

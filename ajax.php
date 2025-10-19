@@ -282,11 +282,16 @@ class AjaxHandler{
         }
         // Establecer la fecha y hora actual
         $date_now = date('Y-m-d H:i:s');
+        // Establecer nombre completo del usuario
+        $firstname = $users_data[$username]['name'] ?? 'John';
+        $lastname = $users_data[$username]['surname'] ?? 'Doe';
         // Establecer la sesión
         $_SESSION['ews_auth'] = [
+            'email' => $users_data[$username]['email'] ?? '',
             'username' => $username,
-            'name' => $users_data[$username]['name'] ?? $username,
-            'surname' => $users_data[$username]['surname'] ?? '',
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'fullname' => trim($firstname . ' ' . $lastname),
             'login_at' => $date_now,
             'token' => bin2hex(random_bytes(32)) // Token de sesión
         ];
