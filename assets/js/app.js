@@ -13,9 +13,12 @@
     EWS.AdminRegisterLicense = function(){
         // Precios base de los productos
         const ProductPrices = {
-            office: 45.00,
-            windows: 65.00
+            office: 45,
+            windows: 65
         };
+        // Límites de descuento
+        const minDiscountPercent = 0;
+        const maxDiscountPercent = 25; 
         // Double-tap detection variables
         let lastTap = 0;
         // Control para habilitar/deshabilitar descuentos
@@ -38,48 +41,39 @@
 
         // Actualización de precios y resumen del pedido
         function updatePrice() {
-            // Obtener valores seleccionados
             const officeVal = $("#field-product-office").val();
             const windowsVal = $("#field-product-windows").val();
-            const DiscountInitial = 7.99;
-            const DiscountFinal = 20.99;
             // Mostrar u ocultar productos en el resumen
             $("#order-product-office").toggleClass("hidden", !officeVal);
             $("#order-product-windows").toggleClass("hidden", !windowsVal);
-            // Restablecer precios
-            let newPrice = 0;
-            // Agregar precios de productos seleccionados
-            if(officeVal) newPrice += ProductPrices.office;
-            if(windowsVal) newPrice += ProductPrices.windows;
-            // Inicializar variables de descuento
+            // Calcular subtotal
+            let subtotal = 0;
+            if (officeVal) subtotal += ProductPrices.office;
+            if (windowsVal) subtotal += ProductPrices.windows;
+            // Variables de descuento
             let discountPercent = 0;
             let discountValue = 0;
-            // Aplicar descuento si ambos productos están seleccionados
-            if(discountsEnabled && officeVal && windowsVal){
-                // Generar porcentaje de descuento aleatorio
-                discountPercent = parseFloat((Math.random() * (DiscountFinal - DiscountInitial) + DiscountInitial).toFixed(2));
-                // Calcular valor del descuento
-                discountValue = parseFloat(((newPrice * discountPercent) / 100).toFixed(2));
-                // Sustraer descuento del precio total
-                newPrice -= discountValue;
-            }
-            // Mostrar el monto subtotal antes del descuento
-            $("#summary-subtotal").text((newPrice + discountValue).toFixed(2));
-            // Actualizar si hubo cambios en el precio
-            if(newPrice !== priceOrder) {
-                priceOrder = parseFloat(newPrice.toFixed(2));
-                $("#field-payment").val(priceOrder.toFixed(2));
-                // Si el descuento está habilitado y se aplicó, mostrarlo
-                if(discountsEnabled && discountPercent > 0){
-                    $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
-                    $("#discount-percentage").text(`${discountPercent}%`);
-                }else{
-                    $("#summary-discount").text("- 0.00");
-                    $("#discount-percentage").text("0%");
+            // Aplicar descuento aleatorio si corresponde
+            if (discountsEnabled && officeVal && windowsVal) {
+                discountPercent = parseFloat(
+                    (Math.random() * (maxDiscountPercent - minDiscountPercent) + minDiscountPercent).toFixed(2)
+                );
+                // Asegurarnos de no pasarnos del límite permitido
+                if (discountPercent > maxDiscountPercent) {
+                    discountPercent = maxDiscountPercent;
                 }
-                // Mostrar el precio total actualizado
-                $("#summary-total").text(priceOrder.toFixed(2));
+                discountValue = parseFloat(((subtotal * discountPercent) / 100).toFixed(2));
             }
+            // Calcular total final
+            const total = parseFloat((subtotal - discountValue).toFixed(2));
+            // Actualizar resumen visual
+            $("#summary-subtotal").text(subtotal.toFixed(2));
+            $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
+            $("#discount-percentage").text(`${discountPercent}%`);
+            $("#summary-total").text(total.toFixed(2));
+            // Guardar y mostrar total
+            priceOrder = total;
+            $("#field-payment").val(total.toFixed(2));
         }
 
         // Actualizar precio de Office al cambiar selección
@@ -115,6 +109,38 @@
         $("#field-payment-method").on("change", function(){
             const paymentMethod = $(this).val();
             localStorage.setItem("admin_payment_method", paymentMethod);
+        });
+
+        // Detectar cambio o escritura manual del campo de pago
+        $("#field-payment").on("input change", function() {
+            let value = parseFloat($(this).val()) || 0;
+            // Calcular subtotal actual
+            let subtotal = 0;
+            const officeVal = $("#field-product-office").val();
+            const windowsVal = $("#field-product-windows").val();
+            if (officeVal) subtotal += ProductPrices.office;
+            if (windowsVal) subtotal += ProductPrices.windows;
+            if (subtotal === 0) return;
+            // Evitar que el pago sea mayor al subtotal
+            if (value > subtotal) {
+                value = subtotal;
+                $(this).val(subtotal.toFixed(2));
+            }
+            // Calcular descuento real
+            let discountValue = parseFloat((subtotal - value).toFixed(2));
+            let discountPercent = parseFloat(((discountValue / subtotal) * 100).toFixed(2));
+            // Aplicar límite máximo de descuento
+            if (discountPercent > 100) {
+                discountPercent = 100;
+                discountValue = parseFloat(((subtotal * discountPercent) / 100).toFixed(2));
+                value = subtotal - discountValue;
+                $(this).val(value.toFixed(2));
+            }
+            // Actualizar resumen visual
+            $("#summary-subtotal").text(subtotal.toFixed(2));
+            $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
+            $("#discount-percentage").text(`${discountPercent}%`);
+            $("#summary-total").text(value.toFixed(2));
         });
 
         // Si hay doble click quitar el producto seleccionado

@@ -31,7 +31,7 @@
     <div class="inside">
         <section id="tab-register" class="content">
             <div class="header">
-                <h2>Registrar Nueva Licencia</h2>
+                <h2>Registrar nueva activación</h2>
                 <p>Utilice el siguiente formulario para registrar una nueva licencia de producto de Microsoft.</p>
             </div>
             <div class="group">
@@ -191,9 +191,9 @@
                     <fieldset class="input">
                         <label for="field-payment-method">Método de pago</label>
                         <select name="payment-method" id="field-payment-method">
+                            <option value="CASH">Efectivo</option>
                             <option value="YAPE">Yape</option>
                             <option value="PLIN">Plin</option>
-                            <option value="CASH">Efectivo</option>
                             <option value="PAYPAL">PayPal</option>
                             <option value="BT_BCP">Transferencia BCP</option>
                             <option value="BT_BBVA">Transferencia BBVA</option>
