@@ -33,7 +33,7 @@
                     .val("")
                     .trigger("change");
                 btn.removeClass("jump");
-            }, 850);
+            }, 800);
         }
 
         // Actualización de precios y resumen del pedido

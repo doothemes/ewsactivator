@@ -213,7 +213,7 @@
             <div class="oder-summary">
                 <h3 class="title">Resumen de la orden</h3>
                 <div class="products">
-                    <button id="order-product-office" data-product="office" class="item hidden button-product">
+                    <button id="order-product-office" data-product="office" class="item fadein hidden button-product">
                         <div class="item-details">
                             <div class="logo">
                                 <img src="/assets/svg/office.svg" alt="Office">
@@ -225,7 +225,7 @@
                             <span class="currency-badge">{{currency}}</span>
                         </div>
                     </button>
-                    <button id="order-product-windows" data-product="windows" class="item hidden button-product">
+                    <button id="order-product-windows" data-product="windows" class="item fadein hidden button-product">
                         <div class="item-details">
                             <div class="logo">
                                 <img src="/assets/svg/windows.svg" alt="windows">
