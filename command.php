@@ -59,13 +59,14 @@ if(!isset($license_data['data']['id'])){
 }
 
 // Extraer nombre y correo electrónico del usuario
-$name  = $license_data['data']['name']  ?? 'John';
+$firstname  = $license_data['data']['firstname']  ?? 'John';
+$lastname = $license_data['data']['lastname'] ?? 'Doe';
 $email = $license_data['data']['email'] ?? 'johndoe@outlook.com';
 
 // Iniciar el comando de despliegue PowerShell
 $deploy_command = '';
 $deploy_command .= "Write-Host ''\n";
-$deploy_command .= "Write-Host '{$name}, gracias por tu compra:' -NoNewline\n";
+$deploy_command .= "Write-Host '{$firstname}, gracias por tu compra:' -NoNewline\n";
 $deploy_command .= "Write-Host ' Licencia verificada!' -ForegroundColor Green\n";
 $deploy_command .= "Write-Host ''\n";
 $deploy_command .= "Write-Host 'Microsoft Account: ' -NoNewline\n";

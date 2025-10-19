@@ -7,10 +7,56 @@
         EWS.AuthLogin();
         EWS.AuthRecoveryPassword();
         EWS.AdminTabs();
-        EWS.AdminRegisterLicense();
+        EWS.AdminRegisterActivatorHelper();
+        EWS.AdminRegisterActivator();
     });
 
-    EWS.AdminRegisterLicense = function(){
+    EWS.AdminRegisterActivator = function(){
+        
+        $(document).on("submit", "#ews-admin-register-license", function (e){
+            e.preventDefault();
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const ButtonText = Button.text();
+
+            $.ajax({
+                url: ews_app.ajax_url+"license_creator",
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function(response){
+                    console.log(response)
+                }
+            });
+        });
+
+        $(document).on("reset", "#ews-admin-register-license", function (e){
+            e.preventDefault();
+            let resetTimer;
+            const form = $(this);
+            // Efecto visual de reseteo
+            form.find("div.oder-summary").addClass("onload");
+            // Restablecer después de un segundo
+            clearTimeout(resetTimer);
+            resetTimer = setTimeout(function() {
+                // Reiniciar todos los campos del formulario
+                form.find("input[type=text], input[type=email], input[type=hidden]").val("");
+                form.find("input[name=total_payment], input[name=total_expenditure]").val("0.00");
+                // Reiniciar selector de productos
+                form.find("select[name=microsoft_office").val("").trigger("change");
+                form.find("select[name=microsoft_windows").val("").trigger("change");
+                // Restablecer valores visibles de resumen
+                $("#summary-subtotal").text("0.00");
+                $("#summary-discount").text("- 0.00");
+                $("#discount-percentage").text("0%");
+                $("#summary-total").text("0.00");
+                // Quitar efecto visual
+                form.find("div.oder-summary").removeClass("onload");
+            }, 500);
+        });
+    }
+
+    EWS.AdminRegisterActivatorHelper = function(){
         // Precios base de los productos
         const ProductPrices = {
             office: 45,
@@ -37,6 +83,39 @@
                     .trigger("change");
                 btn.removeClass("jump");
             }, 800);
+        }
+
+        // Restablecer descuentos a 0%
+        function resetDiscounts() {
+            let resetTimer;
+            // Efecto visual de reseteo
+            $("#order-details").addClass("onload");
+            $("#fieldset-payment").removeClass("shake");
+            // Restablecer después de un segundo
+            clearTimeout(resetTimer);
+            resetTimer = setTimeout(function() {
+                // Reiniciar valores visuales
+                $("#summary-discount").text("- 0.00");
+                $("#discount-percentage").text("0%");
+                $("#field-total-discount").val("0");
+                // Restablecer el total al subtotal actual
+                const subtotal = parseFloat($("#summary-subtotal").text()) || 0;
+                $("#summary-total").text(subtotal.toFixed(2));
+                $("#field-payment").val(subtotal.toFixed(2));
+                // Quitar efecto visual
+                $("#order-details").removeClass("onload");
+                $("#fieldset-payment").addClass("shake").find("input[type=number]").focus();
+            }, 350);
+        }
+
+        // Resaltar un fieldset específico
+        function highligthtFieldset(fieldsetId, inputType = "number") {
+            let highlightTimer;
+            $("#fieldset-"+fieldsetId).addClass("fadein").removeClass("shake");
+            clearTimeout(highlightTimer);
+            highlightTimer = setTimeout(function() {
+                $("#fieldset-"+fieldsetId).removeClass("fadein").find(`input[type=${inputType}]`).focus();
+            }, 350);
         }
 
         // Actualización de precios y resumen del pedido
@@ -70,6 +149,8 @@
             $("#summary-subtotal").text(subtotal.toFixed(2));
             $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
             $("#discount-percentage").text(`${discountPercent}%`);
+            $("#field-subtotal").val(subtotal.toFixed(2));
+            $("#field-total-discount").val(discountValue.toFixed(2));
             $("#summary-total").text(total.toFixed(2));
             // Guardar y mostrar total
             priceOrder = total;
@@ -122,7 +203,7 @@
             if (windowsVal) subtotal += ProductPrices.windows;
             if (subtotal === 0) return;
             // Evitar que el pago sea mayor al subtotal
-            if (value > subtotal) {
+            if(value > subtotal){
                 value = subtotal;
                 $(this).val(subtotal.toFixed(2));
             }
@@ -140,7 +221,37 @@
             $("#summary-subtotal").text(subtotal.toFixed(2));
             $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
             $("#discount-percentage").text(`${discountPercent}%`);
+            $("#field-subtotal").val(subtotal.toFixed(2));
+            $("#field-total-discount").val(discountValue.toFixed(2));
             $("#summary-total").text(value.toFixed(2));
+        });
+
+        // Si hay doble click resaltar el fieldset de pago
+        $("#card-total").on("dblclick", function() {
+            highligthtFieldset("payment");
+        });
+
+        // Soporte movil, Si hay doble tap resaltar el fieldset de pago
+        $("#card-total").on("touchstart", function(e){
+            const now = Date.now();
+            if(now - lastTap < 300){
+                highligthtFieldset("payment");
+            }
+            lastTap = now;
+        });
+
+        // Si hay doble click quitar los descuentos
+        $("#card-discount").on("dblclick", function() {
+            resetDiscounts();
+        });
+
+        // Soporte movil, Si hay doble tap quitar los descuentos
+        $("#card-discount").on("touchstart", function(e){
+            const now = Date.now();
+            if(now - lastTap < 300){
+                resetDiscounts();
+            }
+            lastTap = now;
         });
 
         // Si hay doble click quitar el producto seleccionado
@@ -186,6 +297,7 @@
 
     EWS.AuthLogin = function(){
 
+        // Cerrar sesión
         $(document).on("click", ".auth-logout-link", function (e){
             e.preventDefault();
             $.ajax({
@@ -200,12 +312,13 @@
             return false;
         });
 
+        // Mostrar / Ocultar contraseña
         $(document).on("click", ".toggle-password", function () {
             const $btn = $(this);
             const $icon = $btn.find("i");
             const $idata = $btn.data("input");
             const $input = $("#"+$idata);
-        
+            // Alternar tipo de input y estado del ícono
             if ($input.attr("type") === "password") {
                 // Mostrar contraseña
                 $input.attr("type", "text");
@@ -217,15 +330,13 @@
                 $icon.text("visibility_off");
                 $btn.attr("aria-label", "Mostrar contraseña");
             }
-        
             // Efecto visual rápido al presionar
             $btn.addClass("active");
             setTimeout(() => $btn.removeClass("active"), 150);
         });
         
-
+        // Manejador de envío del formulario de login
         $(document).on("submit", "#ews-auth-login", function (e){
-            
             e.preventDefault();
             var AuthTimer;
             var AuthBtnTimer;
@@ -235,14 +346,13 @@
             const MessageText = $("#auth-message").text();
             const InputUsername = form.find("#input-username").val();
             const InputPassword = form.find("#input-password").val();
-
-            
-
+            // Reestablecer animaciones
             form.find(".shake").removeClass("shake");
             form.find(".jump").removeClass("jump");
             Button.prop('disabled', true).text('Procesando..');
-
+            // Validar campos obligatorios
             if(!InputUsername || !InputPassword){
+                // Animar campos vacíos
                 $("#auth-credentials").addClass("shake");
                 clearTimeout(AuthTimer);
                 AuthTimer = setTimeout(function(){
@@ -250,12 +360,14 @@
                 }, 500);
                 return;
             }else{
+                // Enviar datos al servidor
                 $.ajax({
                     url: ews_app.ajax_url+"auth_login",
                     type: "POST",
                     dataType: "json",
                     data: form.serialize()
                 }).done(function(response){
+                    // Login exitoso
                     if(response.success == true){
                         window.location.href = ews_app.base_url+"admin/dashboard";
                         localStorage.setItem("login_user", response.data.username);
@@ -275,21 +387,20 @@
                     }else{
                         $("#auth-credentials").addClass("shake");
                     }
-    
+                    // Mostrar mensaje de error
                     $("#auth-message").addClass("jump").text(msg);
-
+                    // Reestablecer estado del mensaje
                     clearTimeout(AuthTimer);
                     AuthTimer = setTimeout(function(){
                         $("#auth-message").removeClass("jump").text(MessageText);
                     }, 2500);
-    
                 }).always(function(){
+                    // Reestablecer estado del botón
                     clearTimeout(AuthBtnTimer);
                     AuthBtnTimer = setTimeout(function(){
                         Button.prop('disabled', false).text(ButtonText);
                     }, 2500);
                 });
-    
             }
             return false;
         });
@@ -448,6 +559,4 @@
             return false;
         });
     }
-
-
 })(jQuery);

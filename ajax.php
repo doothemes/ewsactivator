@@ -325,41 +325,75 @@ class AjaxHandler{
     private function license_creator(){
         // Verificar si el usuario está autenticado
         if(is_logged_in() === false){
-            http_response_code(401);
             echo json_encode(['success' => false, 'message' => 'Requiere autenticación.']);
             exit;
         }
         // Obtener y sanitizar correo electrónico
-        $user_email = trim($_POST['email'] ?? '');
+        $user_email = trim($_REQUEST['email_address'] ?? '');
         // Validar correo electrónico
         if($user_email === '' || !filter_var($user_email, FILTER_VALIDATE_EMAIL)){
-            http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Correo electrónico no válido.']);
             exit;
+        }
+        // Obtener y sanitizar productos seleccionados
+        $microsoft_office = trim($_REQUEST['microsoft_office'] ?? '');
+        $microsoft_windows = trim($_REQUEST['microsoft_windows'] ?? '');
+        // Inicializar array de productos
+        $products = [];
+        // Agregar productos al array
+        $products[] = $microsoft_office ? 'OFFICE' : '';
+        $products[] = $microsoft_windows ? 'WINDOWS' : '';
+        // Datos para calcular totales
+        $subtotal = floatval($_REQUEST['subtotal'] ?? 0);
+        $total_discount = floatval($_REQUEST['total_discount'] ?? 0);
+        $total_payment = floatval($_REQUEST['total_payment'] ?? 0);
+        $total_expenditure = floatval($_REQUEST['total_expenditure'] ?? 0);
+        // Validar totales
+        if($subtotal <= 0){
+            echo json_encode(['success' => false, 'message' => 'El subtotal debe ser mayor a cero.']);
+            exit();
+        }
+        if($total_discount < 0 || $total_discount > $subtotal){
+            echo json_encode(['success' => false, 'message' => 'El descuento no puede ser negativo ni mayor al subtotal.']);
+            exit();
+        }
+        if($total_payment <= 0){
+            echo json_encode(['success' => false, 'message' => 'El total de pago no puede ser cero o negativo.']);
+            exit();
+        }
+        if($total_payment > $subtotal){
+            echo json_encode(['success' => false, 'message' => 'El total de pago no puede superar el subtotal.']);
+            exit();
+        }
+        if($total_expenditure < 0 || $total_expenditure > $total_payment) {
+            echo json_encode(['success' => false, 'message' => 'El gasto no puede ser negativo ni mayor al total del pago.']);
+            exit();
         }
         // Crear nueva licencia en PocketBase
         $new_license = PocketBase::add_license([
             'email' => $user_email,
-            'phone' => $_REQUEST['phone'] ?? '',
-            'name' => $_REQUEST['name'] ?? '',
-            'surname' => $_REQUEST['surname'] ?? '',
-            'ip_address' => get_ip_address(),
-            'device_details' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'product' => $_REQUEST['product'] ?? '',
-            'currency' => $_REQUEST['currency'] ?? 'PEN',
-            'payment_method' => $_REQUEST['payment_method'] ?? 'YAPE',
-            'payment_description' => $_REQUEST['payment_description'] ?? '',
-            'total_expenditure' => $_REQUEST['total_expenditure'] ?? 0,
-            'total_payment' => $_REQUEST['total_payment'] ?? 0,
+            'phone' => trim($_REQUEST['phone_number'] ?? ''),
+            'firstname' => trim($_REQUEST['firstname'] ?? ''),
+            'lastname' => trim($_REQUEST['lastname'] ?? ''),
+            'products' => $products,
+            'windows_edition' => $microsoft_windows,
+            'office_edition' => $microsoft_office,
+            'currency' => trim($_REQUEST['currency'] ?? 'PEN'),
+            'payment_method' => trim($_REQUEST['payment_method'] ?? 'YAPE'),
+            'payment_description' => trim($_REQUEST['payment_description'] ?? ''),
+            'subtotal' => $subtotal,
+            'total_discount' => $total_discount,
+            'total_payment' => $total_payment,
+            'total_expenditure' => $total_expenditure,
+            'total_profit' => floatval($total_payment - $total_expenditure),
             'count_requests' => 1,
             'count_activations' => 0,
-            'limit_activations' => $_REQUEST['limit_activations'] ?? 10,
+            'limit_activations' => intval($_REQUEST['limit_activations'] ?? 10),
             'active' => true,
         ]);
         // Validar respuesta de PocketBase
         if(empty($new_license) || !is_array($new_license) || !isset($new_license['data']['id'])){
             $message = $new_license['message'] ?? 'Error al crear la licencia.';
-            http_response_code(500);
             echo json_encode(['success' => false, 'message' => $message]);
             exit;
         }
