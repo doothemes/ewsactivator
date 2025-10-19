@@ -11,49 +11,65 @@
     });
 
     EWS.AdminRegisterLicense = function(){
-        
-        // Base Prices
+        // Precios base de los productos
         const ProductPrices = {
             office: 45.00,
             windows: 65.00
         };
-        // ✅ Control para habilitar/deshabilitar descuentos
+        // Double-tap detection variables
+        let lastTap = 0;
+        // Control para habilitar/deshabilitar descuentos
         let discountsEnabled = true; // ← cambia a false para desactivar
-        // Current total state
+        // Precio inicial del pedido
         let priceOrder = 0;
-        // Update total function
+
+        // Acción común para resetear el producto
+        function triggerProductReset(btn, product) {
+            let btnTimer;
+            btn.addClass("jump");
+            clearTimeout(btnTimer);
+            btnTimer = setTimeout(function() {
+                $("#field-product-" + product)
+                    .val("")
+                    .trigger("change");
+                btn.removeClass("jump");
+            }, 850);
+        }
+
+        // Actualización de precios y resumen del pedido
         function updatePrice() {
-            // Get current values
+            // Obtener valores seleccionados
             const officeVal = $("#field-product-office").val();
             const windowsVal = $("#field-product-windows").val();
-
+            const DiscountInitial = 7.99;
+            const DiscountFinal = 20.99;
             // Mostrar u ocultar productos en el resumen
             $("#order-product-office").toggleClass("hidden", !officeVal);
             $("#order-product-windows").toggleClass("hidden", !windowsVal);
-
-            // Reset base price
+            // Restablecer precios
             let newPrice = 0;
-            // Add prices only if values exist
-            if (officeVal) newPrice += ProductPrices.office;
-            if (windowsVal) newPrice += ProductPrices.windows;
-            // Initialize discount variables
+            // Agregar precios de productos seleccionados
+            if(officeVal) newPrice += ProductPrices.office;
+            if(windowsVal) newPrice += ProductPrices.windows;
+            // Inicializar variables de descuento
             let discountPercent = 0;
             let discountValue = 0;
-            // Apply discount only if both products are selected
-            if (discountsEnabled && officeVal && windowsVal) {
-                // Generate random discount between 2.99 and 9.99
-                discountPercent = parseFloat((Math.random() * (9.99 - 2.99) + 2.99).toFixed(2));
-                // Calculate discount amount
+            // Aplicar descuento si ambos productos están seleccionados
+            if(discountsEnabled && officeVal && windowsVal){
+                // Generar porcentaje de descuento aleatorio
+                discountPercent = parseFloat((Math.random() * (DiscountFinal - DiscountInitial) + DiscountInitial).toFixed(2));
+                // Calcular valor del descuento
                 discountValue = parseFloat(((newPrice * discountPercent) / 100).toFixed(2));
-                // Subtract discount
+                // Sustraer descuento del precio total
                 newPrice -= discountValue;
             }
+            // Mostrar el monto subtotal antes del descuento
             $("#summary-subtotal").text((newPrice + discountValue).toFixed(2));
-            // Update total only if it changed
+            // Actualizar si hubo cambios en el precio
             if(newPrice !== priceOrder) {
                 priceOrder = parseFloat(newPrice.toFixed(2));
                 $("#field-payment").val(priceOrder.toFixed(2));
-                // If discount was applied, show it
+                // Si el descuento está habilitado y se aplicó, mostrarlo
                 if(discountsEnabled && discountPercent > 0){
                     $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
                     $("#discount-percentage").text(`${discountPercent}%`);
@@ -61,11 +77,12 @@
                     $("#summary-discount").text("- 0.00");
                     $("#discount-percentage").text("0%");
                 }
+                // Mostrar el precio total actualizado
                 $("#summary-total").text(priceOrder.toFixed(2));
             }
         }
 
-        // Manejadores de cambio para ambos selectores
+        // Actualizar precio de Office al cambiar selección
         $("#field-product-office").on("change", function() {
             const slc = $(this);
             const val = slc.val();
@@ -76,6 +93,7 @@
             updatePrice();
         });
 
+        // Actualizar precio de Windows al cambiar selección
         $("#field-product-windows").on("change", function() {
             const slc = $(this);
             const val = slc.val();
@@ -86,15 +104,36 @@
             updatePrice();
         });
 
+        // Actualizar moneda si cambia
         $("#field-currency").on("change", function(){
             const currency = $(this).val();
             $(".currency-badge").text(currency);
             localStorage.setItem("admin_currency_badge", currency);
         });
 
+        // Actualizar método de pago si cambia
         $("#field-payment-method").on("change", function(){
             const paymentMethod = $(this).val();
             localStorage.setItem("admin_payment_method", paymentMethod);
+        });
+
+        // Si hay doble click quitar el producto seleccionado
+        $(".button-product").on("dblclick", function() {
+            const btn = $(this);
+            const product = btn.data("product");
+            triggerProductReset(btn, product);
+        });
+
+        // Soporte movil, Si ahy doble tap quitar el producto seleccionado
+        $(".button-product").on("touchstart", function(e) {
+            const now = Date.now();
+            const btn = $(this);
+            const product = btn.data("product");
+            if(now - lastTap < 300){
+                e.preventDefault(); // evita zoom o scroll no deseado
+                triggerProductReset(btn, product);
+            }
+            lastTap = now;
         });
     }
 

@@ -213,19 +213,7 @@
             <div class="oder-summary">
                 <h3 class="title">Resumen de la orden</h3>
                 <div class="products">
-                    <div id="order-product-windows" class="item hidden">
-                        <div class="item-details">
-                            <div class="logo">
-                                <img src="/assets/svg/windows.svg" alt="windows">
-                            </div>
-                            <div class="name">{{product_editition_text}}</div>
-                        </div>
-                        <div class="item-totals">
-                            <span class="product-price">{{unit_price}}</span>
-                            <span class="currency-badge">{{currency}}</span>
-                        </div>
-                    </div>
-                    <div id="order-product-office" class="item hidden">
+                    <button id="order-product-office" data-product="office" class="item hidden button-product">
                         <div class="item-details">
                             <div class="logo">
                                 <img src="/assets/svg/office.svg" alt="Office">
@@ -236,7 +224,19 @@
                             <span class="product-price">{{unit_price}}</span>
                             <span class="currency-badge">{{currency}}</span>
                         </div>
-                    </div>
+                    </button>
+                    <button id="order-product-windows" data-product="windows" class="item hidden button-product">
+                        <div class="item-details">
+                            <div class="logo">
+                                <img src="/assets/svg/windows.svg" alt="windows">
+                            </div>
+                            <div class="name">{{product_editition_text}}</div>
+                        </div>
+                        <div class="item-totals">
+                            <span class="product-price">{{unit_price}}</span>
+                            <span class="currency-badge">{{currency}}</span>
+                        </div>
+                    </button>
                 </div>
                 <div class="details">
                     <div class="card-price">
