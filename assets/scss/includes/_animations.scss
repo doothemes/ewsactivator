@@ -57,6 +57,54 @@
     -webkit-animation: rotation .75s linear infinite;
     animation: rotation .75s linear infinite 
 }
+.fadeout {
+	-webkit-animation: fade-out 0.3s ease-out both;
+	        animation: fade-out 0.3s ease-out both;
+}
+.slide-out-bck-center {
+	-webkit-animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+@-webkit-keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-webkit-keyframes slide-out-bck-center {
+    0% {
+        -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateZ(-1100px);
+                transform: translateZ(-1100px);
+        opacity: 0;
+    }
+}
+@keyframes slide-out-bck-center {
+    0% {
+        -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateZ(-1100px);
+                transform: translateZ(-1100px);
+        opacity: 0;
+    }
+}
 @keyframes rotation {
     from {
         transform: rotate(0deg);

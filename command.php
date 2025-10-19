@@ -32,8 +32,7 @@ require_once __DIR__ . '/init.php';
 function exit_with_message(string $message, string $color = 'Red', int $code = 200): void {
     http_response_code($code);
     $safeMessage = str_replace(['"', "'"], '', $message);
-    echo "Write-Host \"{$safeMessage}\" -ForegroundColor {$color}\n";
-    exit;
+    exit("Write-Host \"{$safeMessage}\" -ForegroundColor {$color}\n");
 }
 
 // Establecer la clave de licencia desde el parámetro GET
@@ -62,6 +61,12 @@ if(!isset($license_data['data']['id'])){
 $firstname  = $license_data['data']['firstname']  ?? 'John';
 $lastname = $license_data['data']['lastname'] ?? 'Doe';
 $email = $license_data['data']['email'] ?? 'johndoe@outlook.com';
+
+
+$limit_activations = $license_data['data']['limit_activations'] ?? 0;
+$count_activations = $license_data['data']['count_activations'] ?? 0;
+
+$aviable_activations = ($limit_activations === 0) ? 'ilimitadas' : max(0, $limit_activations - $count_activations);
 
 // Iniciar el comando de despliegue PowerShell
 $deploy_command = '';

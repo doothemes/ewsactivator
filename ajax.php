@@ -43,8 +43,7 @@ class AjaxHandler{
         // Verificar si se proporcionó una acción
         if(!$action){
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Establece una acción válida.']);
-            return;
+            exit(json_encode(['success' => false, 'message' => 'Establece una acción válida.']));
         }
         // Sanitizar la acción para permitir solo caracteres alfanuméricos y guiones bajos
         $action = preg_replace('/[^a-zA-Z0-9_]/', '', $action); 
@@ -53,7 +52,7 @@ class AjaxHandler{
             $this->$action();
         } else {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Acción no válida o no esta permitida.']);
+            exit(json_encode(['success' => false, 'message' => 'Acción no válida o no esta permitida.']));
         }
     }
 
@@ -65,15 +64,13 @@ class AjaxHandler{
     private function auth_recover_password(){
         // Verificar si el usuario ya está autenticado
         if(is_logged_in() === true){
-            echo json_encode(['success' => false, 'message' => 'Ya has iniciado sesión.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Ya has iniciado sesión.']));
         }
         // Obtener y sanitizar el nombre de usuario
         $username = trim($_REQUEST['username'] ?? '');
         // Validar el nombre de usuario
         if($username === ''){
-            echo json_encode(['success' => false, 'message' => 'Falta el nombre de usuario.', 'field' => false]);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Falta el nombre de usuario.', 'field' => false]));
         }
         // Cargar datos de usuarios
         $users_data = json_decode(file_get_contents(__DIR__.'/storage/users.json'), true);
@@ -81,8 +78,7 @@ class AjaxHandler{
         $get_user = find_user($username, $users_data);
         // Verificar si se encontró el usuario
         if(empty($get_user)){
-            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.', 'field' => 'username']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Usuario no encontrado.', 'field' => 'username']));
         }
         // Función para generar un OTP de 6 dígitos
         $set_otp = generate_otp();
@@ -90,8 +86,7 @@ class AjaxHandler{
         $set_username = array_key_first($get_user);
         // Actualizar el usuario con el OTP y la fecha de expiración (30 minutos)
         if(update_user($set_username, ['otp' => $set_otp, 'otp_expiration' => (time()+1800), 'otp_verified' => false], $users_data) === false){
-            echo json_encode(['success' => false, 'message' => 'Error al generar el código OTP.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Error al generar el código OTP.']));
         }
         // Obtener el correo electrónico y nombre del usuario
         $user_email = $get_user[$set_username]['email'] ?? '';
@@ -108,18 +103,17 @@ class AjaxHandler{
         $mail_body = mail_tagger(mail_message('reset_password'), $mail_data);
         // Enviar el correo electrónico con el código OTP
         if(ews_send_mail($user_email, $mail_subject, $mail_body) === false){
-            echo json_encode(['success' => false, 'message' => 'Error al enviar el correo electrónico con el código OTP.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Error al enviar el correo electrónico con el código OTP.']));
         }
         // Responder con éxito
-        echo json_encode([
+        exit(json_encode([
             'success' => true,
             'message' => 'Código OTP generado exitosamente.',
             'data' => [
                 'username' => $set_username,
                 'userkey' => $get_user[$set_username]['userkey']  ?? ''
             ]
-        ]);
+        ]));
     }
 
     /**
@@ -129,8 +123,7 @@ class AjaxHandler{
     private function auth_validate_otp(){
         // Verificar si el usuario ya está autenticado
         if(is_logged_in()){
-            echo json_encode(['success' => false, 'message' => 'Ya has iniciado sesión.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Ya has iniciado sesión.']));
         }
         // Obtener y sanitizar el nombre de usuario y el código OTP
         $userkey = trim($_REQUEST['userkey'] ?? '');
@@ -138,8 +131,7 @@ class AjaxHandler{
         $otp = trim($_REQUEST['otp'] ?? '');
         // Validar el nombre de usuario y el código OTP
         if($username === '' || $otp === ''){
-            echo json_encode(['success' => false, 'message' => 'Faltan el nombre de usuario o el código OTP.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Faltan el nombre de usuario o el código OTP.']));
         }
         // Cargar datos de usuarios
         $users_data = json_decode(file_get_contents(__DIR__ . '/storage/users.json'), true);
@@ -147,8 +139,7 @@ class AjaxHandler{
         $get_user = find_user($username, $users_data);
         // Verificar si se encontró el usuario
         if(empty($get_user)){
-            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Usuario no encontrado.']));
         }
         // Obtener el nombre de usuario desde la clave del array
         $found_username = array_key_first($get_user);
@@ -158,36 +149,31 @@ class AjaxHandler{
         $get_otp_expiration = $user_data['otp_expiration'] ?? 0;
         // Validar el OTP y su expiración
         if($get_otp === 'none' || $get_otp_expiration === 0){
-            echo json_encode(['success' => false, 'message' => 'No existe un código OTP activo.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'No existe un código OTP activo.']));
         }
         // Verificar si el OTP es correcto
         if($otp !== $get_otp){
-            echo json_encode(['success' => false, 'message' => 'Código OTP incorrecto.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Código OTP incorrecto.']));
         }
         // Verificar si el OTP ha expirado
         if(time() > $get_otp_expiration){
             if(!update_user($found_username, ['otp' => 'none', 'otp_expiration' => 0, 'otp_verified' => false], $users_data)){
-                echo json_encode(['success' => false, 'message' => 'Error al validar el código OTP. Genera uno nuevo.']);
-                exit;
+                exit(json_encode(['success' => false, 'message' => 'Error al validar el código OTP. Genera uno nuevo.']));
             }else{
-                echo json_encode(['success' => false, 'message' => 'El código OTP ha expirado. Genera uno nuevo.']);
-                exit;
+                exit(json_encode(['success' => false, 'message' => 'El código OTP ha expirado. Genera uno nuevo.']));
             }
         }
         // Marcar el OTP como verificado y eliminarlo
         if(!update_user($found_username, ['otp' => 'none', 'otp_expiration' => 0, 'otp_verified' => true], $users_data)){
-            echo json_encode(['success' => false, 'message' => 'Error al validar el código OTP.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Error al validar el código OTP.']));
         }
         // Responder con éxito
-        echo json_encode([
+        exit(json_encode([
             'success'   => true,
             'message'   => 'Código OTP validado exitosamente.',
             'username'  => $found_username,
             'next_step' => 'reset_password'
-        ]);
+        ]));
     }
     
     /**
@@ -197,8 +183,7 @@ class AjaxHandler{
     private function auth_change_password(){
         // Verificar si el usuario ya está autenticado
         if(is_logged_in() === true){
-            echo json_encode(['success' => false, 'message' => 'Ya has iniciado sesión.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Ya has iniciado sesión.']));
         }
         // Obtener y sanitizar los datos de entrada
         $userkey = trim($_REQUEST['userkey'] ?? '');
@@ -207,18 +192,15 @@ class AjaxHandler{
         $password2 = trim($_REQUEST['password2'] ?? '');
         // Validar los datos de entrada
         if($password1 === '' || $password2 === '' || $username === ''){
-            echo json_encode(['success' => false, 'message' => 'Faltan las nuevas contraseñas.', 'field' => false]);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Faltan las nuevas contraseñas.', 'field' => false]));
         }
         // Validar que las contraseñas coincidan
         if($password1 !== $password2){
-            echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.', 'field' => 'password2']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.', 'field' => 'password2']));
         }
         // Validar la longitud mínima de la contraseña
         if(strlen($password1) < 6){
-            echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 6 caracteres.', 'field' => 'password1']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 6 caracteres.', 'field' => 'password1']));
         }
         // Cargar datos de usuarios
         $users_data = json_decode(file_get_contents(__DIR__.'/storage/users.json'), true);
@@ -226,24 +208,21 @@ class AjaxHandler{
         $get_user = find_user($username, $users_data);
         // Verificar si se encontró el usuario
         if(empty($get_user)){
-            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Usuario no encontrado.']));
         }
         // Obtener el nombre de usuario desde la clave del array
         $found_username = array_key_first($get_user);
         $user_data = $get_user[$found_username];
         // Verificar si el OTP ha sido verificado
         if(!isset($user_data['otp_verified']) || $user_data['otp_verified'] !== true){
-            echo json_encode(['success' => false, 'message' => 'No se ha verificado el código OTP.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'No se ha verificado el código OTP.']));
         }
         // Actualizar la contraseña del usuario y marcar OTP como no verificado
         if(!update_user($found_username, ['password' => password_hash($password1, PASSWORD_DEFAULT), 'otp_verified' => false], $users_data)){
-            echo json_encode(['success' => false, 'message' => 'Error al cambiar la contraseña.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Error al cambiar la contraseña.']));
         }
         // Responder con éxito
-        echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosamente. Ya puedes iniciar sesión con tu nueva contraseña.']);
+        exit(json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosamente. Ya puedes iniciar sesión con tu nueva contraseña.']));
     }
 
     /**
@@ -263,22 +242,19 @@ class AjaxHandler{
         // Validar credenciales
         if($username === '' || $password === ''){
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Faltan credenciales.', 'field' => false]);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Faltan credenciales.', 'field' => false]));
         }
         // Cargar datos de usuarios
         $users_data = json_decode(file_get_contents(__DIR__.'/storage/users.json'), true);
         // Verificar si el usuario existe
         if(!array_key_exists($username, $users_data)){
             http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.', 'field' => 'username']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Usuario no encontrado.', 'field' => 'username']));
         }
         // Verificar la contraseña
         if(!password_verify($password, $users_data[$username]['password'])){
             http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta.', 'field' => 'password']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Contraseña incorrecta.', 'field' => 'password']));
         }
         // Establecer la fecha y hora actual
         $date_now = date('Y-m-d H:i:s');
@@ -298,11 +274,10 @@ class AjaxHandler{
         // Guardar la última fecha de inicio de sesión y asegurar que OTP esté desactivado
         if(!update_user($username, ['last_login' => $date_now, 'otp' => 'none', 'otp_expiration' => 0, 'otp_verified' => false], $users_data)){
             http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Error al actualizar la última fecha de inicio de sesión.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Error al actualizar la última fecha de inicio de sesión.']));
         }
         // Responder con éxito
-        echo json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso.', 'data' => $_SESSION['ews_auth']]);
+        exit(json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso.', 'data' => $_SESSION['ews_auth']]));
     }
 
     /**
@@ -319,7 +294,7 @@ class AjaxHandler{
         session_unset();
         session_destroy();
         // Responder con éxito
-        echo json_encode(['success' => true, 'message' => 'Cierre de sesión exitoso.']);
+        exit(json_encode(['success' => true, 'message' => 'Cierre de sesión exitoso.']));
     }
 
     /**
@@ -330,15 +305,13 @@ class AjaxHandler{
     private function license_creator(){
         // Verificar si el usuario está autenticado
         if(is_logged_in() === false){
-            echo json_encode(['success' => false, 'message' => 'Requiere autenticación.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Requiere autenticación.']));
         }
         // Obtener y sanitizar correo electrónico
         $user_email = trim($_REQUEST['email_address'] ?? '');
         // Validar correo electrónico
         if($user_email === '' || !filter_var($user_email, FILTER_VALIDATE_EMAIL)){
-            echo json_encode(['success' => false, 'message' => 'Correo electrónico no válido.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Correo electrónico no válido.']));
         }
         // Obtener y sanitizar productos seleccionados
         $microsoft_office = trim($_REQUEST['microsoft_office'] ?? '');
@@ -355,24 +328,22 @@ class AjaxHandler{
         $total_expenditure = floatval($_REQUEST['total_expenditure'] ?? 0);
         // Validar totales
         if($subtotal <= 0){
-            echo json_encode(['success' => false, 'message' => 'El subtotal debe ser mayor a cero.']);
-            exit();
+            exit(json_encode(['success' => false, 'message' => 'El subtotal debe ser mayor a cero.']));
         }
         if($total_discount < 0 || $total_discount > $subtotal){
-            echo json_encode(['success' => false, 'message' => 'El descuento no puede ser negativo ni mayor al subtotal.']);
-            exit();
+            exit(json_encode(['success' => false, 'message' => 'El descuento no puede ser negativo ni mayor al subtotal.']));
         }
         if($total_payment <= 0){
-            echo json_encode(['success' => false, 'message' => 'El total de pago no puede ser cero o negativo.']);
-            exit();
+            exit(json_encode(['success' => false, 'message' => 'El total de pago no puede ser cero o negativo.']));
+
         }
         if($total_payment > $subtotal){
-            echo json_encode(['success' => false, 'message' => 'El total de pago no puede superar el subtotal.']);
-            exit();
+            exit(json_encode(['success' => false, 'message' => 'El total de pago no puede superar el subtotal.']));
+ 
         }
         if($total_expenditure < 0 || $total_expenditure > $total_payment) {
-            echo json_encode(['success' => false, 'message' => 'El gasto no puede ser negativo ni mayor al total del pago.']);
-            exit();
+            exit(json_encode(['success' => false, 'message' => 'El gasto no puede ser negativo ni mayor al total del pago.']));
+
         }
         // Crear nueva licencia en PocketBase
         $new_license = PocketBase::add_license([
@@ -399,11 +370,10 @@ class AjaxHandler{
         // Validar respuesta de PocketBase
         if(empty($new_license) || !is_array($new_license) || !isset($new_license['data']['id'])){
             $message = $new_license['message'] ?? 'Error al crear la licencia.';
-            echo json_encode(['success' => false, 'message' => $message]);
-            exit;
+            exit(json_encode(['success' => false, 'message' => $message]));
         }
         // Responder con éxito
-        echo json_encode($new_license);
+        exit(json_encode($new_license));
     }
 
     /**
@@ -415,19 +385,17 @@ class AjaxHandler{
         // Verificar si el usuario está autenticado
         if(is_logged_in() === false){
             http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'Requiere autenticación.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Requiere autenticación.']));
         }
         // Obtener y sanitizar clave de licencia
         $license_key = trim($_REQUEST['key'] ?? '');
         // Validar clave de licencia
         if($license_key === ''){
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Falta la clave de licencia.']);
-            exit;
+            exit(json_encode(['success' => false, 'message' => 'Falta la clave de licencia.']));
         }
         // Obtener y validar la licencia en PocketBase
-        echo json_encode(PocketBase::get_license($license_key));
+        exit(json_encode(PocketBase::get_license($license_key)));
     }
 }
 

@@ -75,14 +75,14 @@
         // Acción común para resetear el producto
         function triggerProductReset(btn, product) {
             let btnTimer;
-            btn.addClass("jump");
+            btn.addClass("fadeout");
             clearTimeout(btnTimer);
             btnTimer = setTimeout(function() {
                 $("#field-product-" + product)
                     .val("")
                     .trigger("change");
-                btn.removeClass("jump");
-            }, 800);
+                btn.removeClass("fadeout");
+            }, 300);
         }
 
         // Restablecer descuentos a 0%
@@ -119,7 +119,7 @@
         }
 
         // Actualización de precios y resumen del pedido
-        function updatePrice() {
+        function updatePrice(){
             const officeVal = $("#field-product-office").val();
             const windowsVal = $("#field-product-windows").val();
             // Mostrar u ocultar productos en el resumen
