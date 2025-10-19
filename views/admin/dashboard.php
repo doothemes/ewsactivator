@@ -168,12 +168,21 @@
                     <fieldset class="input">
                         <label for="field-currency">Moneda</label>
                         <select name="currency" id="field-currency">
-                            <option value="PEN">PEN - Sol Peruano</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="USD">USD - Dolar</option>
-                            <option value="CHF">CHF - Franco Suizo</option>
-                            <option value="CLP">CLP - Peso Chileno</option>
-                            <option value="MXN">MXN - Peso Mexicano</option>
+                            <optgroup label="Fiat ">
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="USD">USD - Dolar</option>
+                                <option value="PEN">PEN - Sol Peruano</option>
+                                <option value="CHF">CHF - Franco Suizo</option>
+                                <option value="CLP">CLP - Peso Chileno</option>
+                                <option value="MXN">MXN - Peso Mexicano</option>
+                            </optgroup>
+                            <optgroup label="Criptomonedas">
+                                <option value="BTC">BTC - Bitcoin</option>
+                                <option value="ETH">ETH - Ethereum</option>
+                                <option value="USDT">USDT - Tether</option>
+                                <option value="USDC">USDC - USD Coin</option>
+                                <option value="BNB">BNB - Binance Coin</option>
+                            </optgroup>
                         </select>
                     </fieldset>
                     <fieldset class="input">
@@ -195,6 +204,7 @@
                             <option value="YAPE">Yape</option>
                             <option value="PLIN">Plin</option>
                             <option value="PAYPAL">PayPal</option>
+                            <option value="BINANCE">Binance</option>
                             <option value="BT_BCP">Transferencia BCP</option>
                             <option value="BT_BBVA">Transferencia BBVA</option>
                             <option value="BT_INTERBANK">Transferencia Interbank</option>
@@ -264,8 +274,8 @@
             </div>
             <div class="controls">
                 <div class="btns">
-                    <button class="button button-primary" type=submit id="register-submit">Registrar Licencia</button> 
-                    <button class="button button-secondary" type=reset id="register-reset">Restablecer</button>
+                    <button class="button button-primary" type=submit id="register-submit">Completar orden</button> 
+                    <button class="button button-secondary" type=reset id="register-reset">Cancelar</button>
                 </div>
                 <div class="ntce">
                     <p class="notice">Asegúrate de que todos los datos sean correctos. Si detectas algún error, comunícate con nosotros para actualizar la orden.</p>
@@ -275,7 +285,14 @@
         <section id="tab-finder" class="content">{{finder}}</section>
         <section id="tab-settings" class="content">{{settings}}</section>
     </div>
-    <footer>
-        {{footer}}
+    <footer class="dasboard">
+        <div class="copy">
+            <div class="logo">
+                <img src="/assets/svg/ews.svg" alt="EWS Networks">
+            </div>
+            <div class="text">
+                <small>© <?=date('Y'); ?>, Version: EWSActivator@<?=EWS_VERSION?></small>
+            </div>
+        </div>
     </footer>
 </main>
