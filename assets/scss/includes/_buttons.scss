@@ -33,4 +33,20 @@
             cursor: default;
         }
     }
+    &.button-secondary{
+        background-color: transparent;
+        border-color: var(--ews-border-default);
+        color: var(--ews-text-icon);
+        transition: all .3s ease;
+        &:hover{
+            background-color: var(--ews-background-paper);
+            border-color: var(--ews-border-hover);
+            color: var(--ews-text-hover);
+        }
+        &:disabled{
+            color: rgba(136, 136, 136, 0.7);
+            border-color: rgba(204, 204, 204, 0.7);
+            cursor: default;
+        }
+    }
 }

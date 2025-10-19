@@ -286,6 +286,7 @@ class AjaxHandler{
         $_SESSION['ews_auth'] = [
             'username' => $username,
             'name' => $users_data[$username]['name'] ?? $username,
+            'surname' => $users_data[$username]['surname'] ?? '',
             'login_at' => $date_now,
             'token' => bin2hex(random_bytes(32)) // Token de sesión
         ];

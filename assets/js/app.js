@@ -11,6 +11,80 @@
     });
 
     EWS.AdminRegisterLicense = function(){
+        
+        // Base Prices
+        const ProductPrices = {
+            office: 45.00,
+            windows: 65.00
+        };
+        // ✅ Control para habilitar/deshabilitar descuentos
+        let discountsEnabled = true; // ← cambia a false para desactivar
+        // Current total state
+        let priceOrder = 0;
+        // Update total function
+        function updatePrice() {
+            // Get current values
+            const officeVal = $("#field-product-office").val();
+            const windowsVal = $("#field-product-windows").val();
+
+            // Mostrar u ocultar productos en el resumen
+            $("#order-product-office").toggleClass("hidden", !officeVal);
+            $("#order-product-windows").toggleClass("hidden", !windowsVal);
+
+            // Reset base price
+            let newPrice = 0;
+            // Add prices only if values exist
+            if (officeVal) newPrice += ProductPrices.office;
+            if (windowsVal) newPrice += ProductPrices.windows;
+            // Initialize discount variables
+            let discountPercent = 0;
+            let discountValue = 0;
+            // Apply discount only if both products are selected
+            if (discountsEnabled && officeVal && windowsVal) {
+                // Generate random discount between 2.99 and 9.99
+                discountPercent = parseFloat((Math.random() * (9.99 - 2.99) + 2.99).toFixed(2));
+                // Calculate discount amount
+                discountValue = parseFloat(((newPrice * discountPercent) / 100).toFixed(2));
+                // Subtract discount
+                newPrice -= discountValue;
+            }
+            $("#summary-subtotal").text((newPrice + discountValue).toFixed(2));
+            // Update total only if it changed
+            if(newPrice !== priceOrder) {
+                priceOrder = parseFloat(newPrice.toFixed(2));
+                $("#field-payment").val(priceOrder.toFixed(2));
+                // If discount was applied, show it
+                if(discountsEnabled && discountPercent > 0){
+                    $("#summary-discount").text(`- ${discountValue.toFixed(2)}`);
+                    $("#discount-percentage").text(`${discountPercent}%`);
+                }else{
+                    $("#summary-discount").text("- 0.00");
+                    $("#discount-percentage").text("0%");
+                }
+                $("#summary-total").text(priceOrder.toFixed(2));
+            }
+        }
+
+        // Manejadores de cambio para ambos selectores
+        $("#field-product-office").on("change", function() {
+            const slc = $(this);
+            const val = slc.val();
+            const txt = slc.find("option:selected").text();
+            const ord = $("#order-product-office");
+            ord.find(".name").text(txt);
+            ord.find(".product-price").text(ProductPrices.office.toFixed(2));
+            updatePrice();
+        });
+
+        $("#field-product-windows").on("change", function() {
+            const slc = $(this);
+            const val = slc.val();
+            const txt = slc.find("option:selected").text();
+            const ord = $("#order-product-windows");
+            ord.find(".name").text(txt);
+            ord.find(".product-price").text(ProductPrices.windows.toFixed(2));
+            updatePrice();
+        });
 
         $("#field-currency").on("change", function(){
             const currency = $(this).val();
@@ -21,16 +95,6 @@
         $("#field-payment-method").on("change", function(){
             const paymentMethod = $(this).val();
             localStorage.setItem("admin_payment_method", paymentMethod);
-        });
-
-        $("#field-product-office").on("change", function(){
-            const paymentMethod = $(this).val();
-            localStorage.setItem("admin_product_office", paymentMethod);
-        });
-
-        $("#field-product-windows").on("change", function(){
-            const paymentMethod = $(this).val();
-            localStorage.setItem("admin_product_windows", paymentMethod);
         });
     }
 
@@ -129,6 +193,7 @@
                 }).done(function(response){
                     if(response.success == true){
                         window.location.href = ews_app.base_url+"admin/dashboard";
+                        localStorage.setItem("login_user", response.data.username);
                     }
                 }).fail(function(jqXHR, textStatus, errorThrown){
                     let msg = 'Error desconocido.';

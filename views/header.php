@@ -32,16 +32,14 @@
         };
         // Prevent caching of AJAX requests
         $(document).ready(function(){
-            const productWindows = localStorage.getItem("admin_product_windows") ?? "";
-            const productOffice = localStorage.getItem("admin_product_office") ?? "";
+            const loginUsername = localStorage.getItem("login_user") ?? "";
             const paymentMethod = localStorage.getItem("admin_payment_method") ?? "YAPE";
             const currencyBadge = localStorage.getItem("admin_currency_badge") ?? "PEN";
             const savedTab = localStorage.getItem("admin_active_tab") ?? "register";
             $("#target-"+savedTab).trigger("click");
-            $("#field-product-windows").val(productWindows);
-            $("#field-product-office").val(productOffice);
             $("#field-currency").val(currencyBadge);
             $("#field-payment-method").val(paymentMethod);
+            $("#input-username").val(loginUsername);
             $(".currency-badge").text(currencyBadge);
         });
     </script>

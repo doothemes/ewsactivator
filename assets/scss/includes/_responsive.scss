@@ -51,6 +51,36 @@
             background-color: transparent;
         }
     }
+    .oder-summary{
+        margin: 0 ;
+        h3.title{
+            font-size: 1.3rem;
+        }
+        .products{
+            .item{
+                padding: 1rem;
+                .item-details{
+                    .name {
+                        font-size: .95rem;
+                    }
+                }
+            }
+        }
+        .details{
+            flex-direction: column;
+            margin-top: 1rem;
+            .card-price{
+                flex-direction: row-reverse;
+                justify-content: space-between;
+                background-color: transparent;
+                border-radius: 0;
+                border-bottom: solid 1px var(--ews-border-hover);
+                .desc{
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
 }
 @media only screen and (max-width: 400px){
     main.auth-wrap{

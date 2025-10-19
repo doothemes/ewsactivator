@@ -74,7 +74,7 @@
                 <div class="fields">
                     <fieldset class="input">
                         <label for="field-product-office">Microsoft Office</label>
-                        <select name="microsoft_office" id="field-product-office">
+                        <select name="microsoft_office" data-identity="a43269512d7ad1034031f913a61944ba" id="field-product-office">
                             <option value="">Seleccionar edición</option>
                             <optgroup label="Office 2016">
                                 <option value="OFFICE_HOME_STUDENT_2016">Office Home & Student 2016</option>
@@ -130,7 +130,7 @@
                     </fieldset>
                     <fieldset class="input">
                         <label for="field-product-windows">Microsoft Windows</label>
-                        <select name="microsoft_windows" id="field-product-windows">
+                        <select name="microsoft_windows" data-identity="9ce3f67202fa6adfae56987cb5ec7ed0" id="field-product-windows">
                             <option value="">Seleccionar edición</option>
                             <optgroup label="Windows 11">
                                 <option value="WINDOWS_11_HOME">Windows 11 Home</option>
@@ -210,11 +210,64 @@
                     </fieldset>
                 </div>
             </div>
-            <div class="controls">
-                <div>
-                    <button class="button button-primary" type=submit id="register-submit">Registrar Licencia</button> 
+            <div class="oder-summary">
+                <h3 class="title">Resumen de la orden</h3>
+                <div class="products">
+                    <div id="order-product-windows" class="item hidden">
+                        <div class="item-details">
+                            <div class="logo">
+                                <img src="/assets/svg/windows.svg" alt="windows">
+                            </div>
+                            <div class="name">{{product_editition_text}}</div>
+                        </div>
+                        <div class="item-totals">
+                            <span class="product-price">{{unit_price}}</span>
+                            <span class="currency-badge">{{currency}}</span>
+                        </div>
+                    </div>
+                    <div id="order-product-office" class="item hidden">
+                        <div class="item-details">
+                            <div class="logo">
+                                <img src="/assets/svg/office.svg" alt="Office">
+                            </div>
+                            <div class="name">{{product_editition_text}}</div>
+                        </div>
+                        <div class="item-totals">
+                            <span class="product-price">{{unit_price}}</span>
+                            <span class="currency-badge">{{currency}}</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
+                <div class="details">
+                    <div class="card-price">
+                        <div class="amount">
+                            <span id="summary-subtotal">0.00</span>
+                            <span class="currency-badge">{{currency}}</span>
+                        </div>
+                        <div class="desc">Subtotal</div>
+                    </div>
+                    <div class="card-price">
+                        <div class="amount">
+                            <span id="summary-discount">- 0.00</span>
+                            <span class="currency-badge">{{currency}}</span>
+                        </div>
+                        <div class="desc">Descuento <span id="discount-percentage">0%</span></div>
+                    </div>
+                    <div class="card-price">
+                        <div class="amount">
+                            <span id="summary-total">0.00</span>
+                            <span class="currency-badge">{{currency}}</span>
+                        </div>
+                        <div class="desc">Total</div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <div class="btns">
+                    <button class="button button-primary" type=submit id="register-submit">Registrar Licencia</button> 
+                    <button class="button button-secondary" type=reset id="register-reset">Restablecer</button>
+                </div>
+                <div class="ntce">
                     <p class="notice">Asegúrate de que todos los datos sean correctos. Si detectas algún error, comunícate con nosotros para actualizar la orden.</p>
                 </div>
             </div>
