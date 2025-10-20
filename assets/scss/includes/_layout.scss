@@ -17,8 +17,8 @@ body{
             width: 100vw;
             height: 100vh;
             background: var(--ews-background-default) var(--ews-svg-loader) center no-repeat;
-            -webkit-background-size: 60px auto;
-            background-size: 60px auto;
+            -webkit-background-size: 3.7rem auto;
+            background-size: 3.7rem auto;
         }
     }
 }
@@ -39,8 +39,8 @@ a{
         width: 100%;
         height: 100%;
         background: var(--ews-background-onload) var(--ews-svg-loader) center no-repeat;
-        -webkit-background-size: 40px auto;
-        background-size: 40px auto;
+        -webkit-background-size: 2.5rem auto;
+        background-size: 2.5rem auto;
     }
 }
 .wrap{
@@ -51,7 +51,7 @@ a{
 }
 .container {
     max-width: var(--ews-width-container);
-    padding: 5px 20px;
+    padding: 0 1.3rem;
     margin: 0 auto;
 }
 .hidden{

@@ -1,10 +1,17 @@
 main.admin-wrap{
     width: 100%;
     display: flex;
+    position: relative;
     flex-direction: column;
     gap: 20px;
     header.navigator{
-        margin: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: var(--ews-background-default);
+        -webkit-box-shadow: 0px 10px 18px 0px var(--ews-background-default); 
+        box-shadow: 0px 10px 18px 0px var(--ews-background-default);
+        padding: 1rem 0;
         width: 100%;
         display: flex;
         justify-content: space-between;
