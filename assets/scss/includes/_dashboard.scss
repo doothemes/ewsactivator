@@ -6,8 +6,8 @@ main.admin-wrap{
     gap: 20px;
     header.navigator{
         background-color: var(--ews-background-default);
-        -webkit-box-shadow: 0px 10px 18px 0px var(--ews-background-default); 
-        box-shadow: 0px 10px 18px 0px var(--ews-background-default);
+        -webkit-box-shadow: 0px 10px 18px 0px rgba(0, 0, 0, 0.69); 
+        box-shadow: 0px 10px 18px 0px rgba(0, 0, 0, 0.69);
         padding: 1rem 0;
         width: 100%;
         display: flex;

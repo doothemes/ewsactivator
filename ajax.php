@@ -378,10 +378,12 @@ class AjaxHandler{
             'active' => true,
             'comments' => [
                 [
+                    'uid' => bin2hex(random_bytes(16)),
                     'date' => date('Y-m-d H:i:s'),
                     'username' => $_SESSION['ews_auth']['username'] ?? 'system',
                     'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'John Doe',
-                    'comment' => 'Licencia registrada exitosamente.'
+                    'comment' => 'Licencia registrada exitosamente.',
+                    'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
                 ]
             ]
         ]);

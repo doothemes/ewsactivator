@@ -259,6 +259,9 @@ class PocketBase{
                 'message' => $license_data['message'] ?? 'Licencia no encontrada.'
             ];
         }
+        // Datos requeridos para registrar un log
+        $comments = $license_data['comments'] ?? [];
+        $ip_address = get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '');
         // Extraer datos relevantes de la licencia
         $license_limit_activations = (int)($license_data['limit_activations'] ?? 0);
         $license_count_activations = (int)($license_data['count_activations'] ?? 0);
@@ -275,21 +278,40 @@ class PocketBase{
         $counter_activations = (int)$license_count_activations + 1;
         // Verificar límite de activaciones
         if($license_limit_activations != 0 && $license_count_activations >= $license_limit_activations){
+            // Registrar comentario de activación
+            array_unshift($comments, [
+                'uid' => bin2hex(random_bytes(16)),
+                'date' => date('Y-m-d H:i:s'),
+                'username' => 'system',
+                'fullname' => 'EWS Activator',
+                'comment' => 'Se alcanzó el límite de activaciones de licencias',
+                'ip_address' => trim($ip_address)
+            ]);
             // Actualizar solo el contador de solicitudes
-            $pb->request('PATCH', $endpoint, ['count_requests' => $counter_requests]);
+            $pb->request('PATCH', $endpoint, ['count_requests' => $counter_requests, 'comments' => $comments]);
             // Notificar que se alcanzó el límite de activaciones
             return [
                 'success' => false,
                 'message' => 'Se alcanzó el límite de activaciones de licencias.'
             ];
         }
+        // Registrar comentario de activación
+        array_unshift($comments, [
+            'uid' => bin2hex(random_bytes(16)),
+            'date' => date('Y-m-d H:i:s'),
+            'username' => 'system',
+            'fullname' => 'EWS Activator',
+            'comment' => 'Licencia activada exitosamente.',
+            'ip_address' => trim($ip_address)
+        ]);
         // Preparar datos a actualizar
         $payload = [
             'activated'=> true,
-            'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? ''),
+            'ip_address' => $ip_address,
             'device_details' => $_SERVER['HTTP_USER_AGENT'] ?? '',
             'count_requests' => $counter_requests,
-            'count_activations'  => $counter_activations
+            'count_activations'  => $counter_activations,
+            'comments' => $comments
         ];
         // Ejecutar actualización
         $response = $pb->request('PATCH', $endpoint, $payload);
