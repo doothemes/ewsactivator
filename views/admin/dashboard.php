@@ -1,6 +1,6 @@
 <main class="admin-wrap container">
     <!-- Header / Navigator -->
-    <header class="navigator">
+    <header id="dashboard-navigator" class="navigator">
         <div class="left">
             <div class="logo">
                 <img src="/assets/svg/microsoft.svg" alt="microsoft">

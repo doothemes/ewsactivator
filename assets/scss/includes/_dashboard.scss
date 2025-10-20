@@ -5,9 +5,6 @@ main.admin-wrap{
     flex-direction: column;
     gap: 20px;
     header.navigator{
-        position: sticky;
-        top: 0;
-        z-index: 1000;
         background-color: var(--ews-background-default);
         -webkit-box-shadow: 0px 10px 18px 0px var(--ews-background-default); 
         box-shadow: 0px 10px 18px 0px var(--ews-background-default);
@@ -16,6 +13,12 @@ main.admin-wrap{
         display: flex;
         justify-content: space-between;
         align-items: center;
+        transition: all .3s ease;
+        &.sticky{
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
         .left{
             display: flex;
             flex-direction: row;

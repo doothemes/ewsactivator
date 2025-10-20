@@ -4,12 +4,30 @@
     var EWS = {};
 
     $(document).ready(function(){
+        EWS.Header();
         EWS.AuthLogin();
         EWS.AuthRecoveryPassword();
         EWS.AdminTabs();
         EWS.AdminRegisterActivatorHelper();
         EWS.AdminRegisterActivator();
     });
+
+    EWS.Header = function(){
+        // Detecta scroll hacia arriba o hacia abajo
+        let lastScrollTop = 0;
+        $(window).on("scroll touchmove", function (){
+        const currentScroll = $(this).scrollTop();
+        const $header = $("#dashboard-navigator");
+        // Si hacemos scroll hacia arriba
+        if(currentScroll < lastScrollTop){
+            $header.addClass("sticky");
+        } else {
+            $header.removeClass("sticky");
+        }
+        // Actualiza la posición del scroll
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
+    }
 
     EWS.AdminRegisterActivator = function(){
 
