@@ -13,20 +13,38 @@
     });
 
     EWS.Header = function(){
-        // Detecta scroll hacia arriba o hacia abajo
         let lastScrollTop = 0;
-        $(window).on("scroll touchmove", function (){
+        let scrollTimeout = null;
+        const $header = $("header.navigator");
+        const tolerance = 15; // píxeles mínimos antes de reaccionar
+        const delay = 25; // milisegundos de espera antes de aplicar el cambio
+        let isSticky = false; // evita parpadeos innecesarios
+
+        $(window).on("scroll touchmove", function () {
         const currentScroll = $(this).scrollTop();
-        const $header = $("#dashboard-navigator");
-        // Si hacemos scroll hacia arriba
-        if(currentScroll < lastScrollTop){
+
+        // Si el cambio es menor al umbral, no hacemos nada
+        if (Math.abs(currentScroll - lastScrollTop) < tolerance) return;
+
+        // Cancelamos cualquier acción anterior mientras sigue el movimiento
+        clearTimeout(scrollTimeout);
+
+        // Esperamos un breve instante antes de aplicar el efecto
+        scrollTimeout = setTimeout(() => {
+            if (currentScroll < lastScrollTop && !isSticky) {
+            // Scroll hacia arriba → mostrar header
             $header.addClass("sticky");
-        } else {
+            isSticky = true;
+            } else if (currentScroll > lastScrollTop && isSticky) {
+            // Scroll hacia abajo → ocultar header
             $header.removeClass("sticky");
-        }
-        // Actualiza la posición del scroll
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            isSticky = false;
+            }
+
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        }, delay);
         });
+
     }
 
     EWS.AdminRegisterActivator = function(){
