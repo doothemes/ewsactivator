@@ -13,7 +13,7 @@ main.admin-wrap{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        transition: all .3s ease;
+        transition: none;
         &.sticky{
             position: sticky;
             top: 0;

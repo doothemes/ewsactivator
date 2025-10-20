@@ -18,33 +18,32 @@
         const $header = $("header.navigator");
         const tolerance = 15; // píxeles mínimos antes de reaccionar
         const delay = 25; // milisegundos de espera antes de aplicar el cambio
-        let isSticky = false; // evita parpadeos innecesarios
-
+        let isSticky = false;
         $(window).on("scroll touchmove", function () {
-        const currentScroll = $(this).scrollTop();
-
-        // Si el cambio es menor al umbral, no hacemos nada
-        if (Math.abs(currentScroll - lastScrollTop) < tolerance) return;
-
-        // Cancelamos cualquier acción anterior mientras sigue el movimiento
-        clearTimeout(scrollTimeout);
-
-        // Esperamos un breve instante antes de aplicar el efecto
-        scrollTimeout = setTimeout(() => {
-            if (currentScroll < lastScrollTop && !isSticky) {
-            // Scroll hacia arriba → mostrar header
-            $header.addClass("sticky");
-            isSticky = true;
-            } else if (currentScroll > lastScrollTop && isSticky) {
-            // Scroll hacia abajo → ocultar header
-            $header.removeClass("sticky");
-            isSticky = false;
-            }
-
-            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-        }, delay);
+            const currentScroll = $(this).scrollTop();
+            if(Math.abs(currentScroll - lastScrollTop) < tolerance) return;
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (currentScroll < lastScrollTop && !isSticky) {
+                // Scroll hacia arriba → mostrar
+                $header.stop(true, true).animate(
+                    { opacity: 1, top: 0 },
+                    { duration: 300, easing: "swing" }
+                );
+                $header.addClass("sticky");
+                isSticky = true;
+                } else if (currentScroll > lastScrollTop && isSticky) {
+                    // Scroll hacia abajo → ocultar
+                    $header.stop(true, true).animate(
+                        { opacity: 0, top: "-100px" },
+                        { duration: 300, easing: "swing" }
+                    );
+                    $header.removeClass("sticky");
+                    isSticky = false;
+                }
+                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            }, delay);
         });
-
     }
 
     EWS.AdminRegisterActivator = function(){
