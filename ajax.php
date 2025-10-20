@@ -345,18 +345,28 @@ class AjaxHandler{
             exit(json_encode(['success' => false, 'message' => 'El gasto no puede ser negativo ni mayor al total del pago.']));
 
         }
+
+        // Sanitizar el resto de campos y preparar datos
+        $firstname = trim($_REQUEST['firstname'] ?? '');
+        $lastname = trim($_REQUEST['lastname'] ?? '');
+        $phone_number = trim($_REQUEST['phone_number'] ?? '');
+        $payment_currency = trim($_REQUEST['currency'] ?? 'PEN');
+        $payment_method = trim($_REQUEST['payment_method'] ?? 'YAPE');
+        $payment_description = trim($_REQUEST['payment_description'] ?? '');
+        $activations_limit = intval($_REQUEST['limit_activations'] ?? 10);
+
         // Crear nueva licencia en PocketBase
         $new_license = PocketBase::add_license([
             'email' => $user_email,
-            'phone' => trim($_REQUEST['phone_number'] ?? ''),
-            'firstname' => trim($_REQUEST['firstname'] ?? ''),
-            'lastname' => trim($_REQUEST['lastname'] ?? ''),
+            'phone' => $phone_number,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
             'products' => $products,
             'windows_edition' => $microsoft_windows,
             'office_edition' => $microsoft_office,
-            'currency' => trim($_REQUEST['currency'] ?? 'PEN'),
-            'payment_method' => trim($_REQUEST['payment_method'] ?? 'YAPE'),
-            'payment_description' => trim($_REQUEST['payment_description'] ?? ''),
+            'currency' => $payment_currency,
+            'payment_method' => $payment_method,
+            'payment_description' => $payment_description,
             'subtotal' => $subtotal,
             'total_discount' => $total_discount,
             'total_payment' => $total_payment,
@@ -364,14 +374,36 @@ class AjaxHandler{
             'total_profit' => floatval($total_payment - $total_expenditure),
             'count_requests' => 1,
             'count_activations' => 0,
-            'limit_activations' => intval($_REQUEST['limit_activations'] ?? 10),
+            'limit_activations' => $activations_limit,
             'active' => true,
+            'comments' => [
+                [
+                    'date' => date('Y-m-d H:i:s'),
+                    'username' => $_SESSION['ews_auth']['username'] ?? 'system',
+                    'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'John Doe',
+                    'comment' => 'Licencia registrada exitosamente.'
+                ]
+            ]
         ]);
         // Validar respuesta de PocketBase
         if(empty($new_license) || !is_array($new_license) || !isset($new_license['data']['id'])){
             $message = $new_license['message'] ?? 'Error al crear la licencia.';
             exit(json_encode(['success' => false, 'message' => $message]));
         }
+
+        $email_data = [
+            'name' => $firstname,
+            'lastname' => $lastname,
+            'phone' => $phone_number,
+            'payment_currency' => $payment_currency,
+            'payment_method' => $payment_method,
+            'payment_description' => $payment_description,
+            'activations_limit' => $activations_limit,
+            'subtotal' => $subtotal,
+            'total_discount' => $total_discount,
+            'total_payment' => $total_payment
+        ]; 
+
         // Responder con éxito
         exit(json_encode($new_license));
     }

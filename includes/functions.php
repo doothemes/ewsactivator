@@ -270,7 +270,7 @@ function mail_tagger(string $content = '', array $data = [], bool $include_commo
  * @param string $extension Extensión del archivo (por defecto: 'txt')
  * @return string Contenido del archivo o 'error/file_not_found' si no existe
  */
-function mail_message(string $file_name = '', string $extension = 'txt'): string{
+function mail_message(string $file_name = '', string $extension = 'html'): string{
     // Sanitizar el nombre del archivo
     $safe_name = preg_replace('/[^a-zA-Z0-9_\-]/', '', $file_name);
     // Componer la ruta completa del archivo

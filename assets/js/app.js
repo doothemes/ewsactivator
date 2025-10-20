@@ -12,28 +12,12 @@
     });
 
     EWS.AdminRegisterActivator = function(){
-        
-        $(document).on("submit", "#ews-admin-register-license", function (e){
-            e.preventDefault();
-            const form = $(this);
-            const Button = form.find('button[type="submit"]');
-            const ButtonText = Button.text();
 
-            $.ajax({
-                url: ews_app.ajax_url+"license_creator",
-                type: "POST",
-                dataType: "json",
-                data: form.serialize(),
-                success: function(response){
-                    console.log(response)
-                }
-            });
-        });
+        var $registerForm = "#ews-admin-register-license";
 
-        $(document).on("reset", "#ews-admin-register-license", function (e){
-            e.preventDefault();
+        function formResetter(){
             let resetTimer;
-            const form = $(this);
+            const form = $($registerForm);
             // Efecto visual de reseteo
             form.find("div.oder-summary").addClass("onload");
             // Restablecer después de un segundo
@@ -53,6 +37,45 @@
                 // Quitar efecto visual
                 form.find("div.oder-summary").removeClass("onload");
             }, 500);
+        }
+        
+        $(document).on("submit", $registerForm, function (e){
+            e.preventDefault();
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const ButtonText = Button.text();
+            
+            Button.prop("disabled", true).text("Registrando..");
+            form.find("div.oder-summary").addClass("onload");
+
+            $.ajax({
+                url: ews_app.ajax_url+"license_creator",
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function(response){
+                   
+                    if(response.success == true){
+
+                    }else{
+
+                    }
+
+                    $("#target-finder").trigger("click");
+
+                    formResetter();
+
+                    Button.prop("disabled", false).text(ButtonText);
+                }
+            });
+        });
+
+        // Manejador de reseteo del formulario
+        $(document).on("reset", $registerForm, function (e){
+            // Prevenir el reseteo por defecto
+            e.preventDefault();
+            // Llamar a la función de reseteo personalizada
+            formResetter();
         });
     }
 

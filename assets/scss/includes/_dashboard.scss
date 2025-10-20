@@ -57,8 +57,8 @@ main.admin-wrap{
             align-items: center;
             .profile{
                 h3{
-                    font-size: 1.3rem;
-                    font-weight: normal;
+                    font-size: 1rem;
+                    font-weight: 600;
                 }
             }
             .control{
@@ -137,14 +137,20 @@ main.admin-wrap{
                 padding: 1.5rem 4rem;
                 background-color: var(--ews-background-paper);
                 border-radius: var(--ews-border-radius);
-                h3.title{
-                    font-size: 1.1rem;
-                    font-weight: normal;
-                }
-                p.desc{
-                    font-size: .85rem;
-                    line-height: 1.5;
-                    color: var(--ews-text-secondary);
+                .heading{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0;
+                    margin-bottom: .75rem;
+                    h3.title{
+                        font-size: 1.1rem;
+                        font-weight: normal;
+                    }
+                    p.desc{
+                        font-size: .85rem;
+                        line-height: 1.5;
+                        color: var(--ews-text-secondary);
+                    }
                 }
                 .fields{
                     width: 100%;
@@ -183,6 +189,18 @@ main.admin-wrap{
                             left: 13px;
                             background-color: var(--ews-background-paper);
                             padding: 0 5px;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            img{
+                                opacity: .3;
+                                float: left;
+                                width: 15px;
+                                height: 15px;
+                            }
+                            span{
+                                margin-left: .4rem;
+                            }
                         }
                         input[type="text"],
                         input[type="email"],
@@ -235,9 +253,17 @@ main.admin-wrap{
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin: 3rem 0;
     h3.title{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: .6rem;
         font-size: 1.7rem;
         font-weight: normal;
+        span.icon{
+            color: var(--ews-text-disabled);
+        }
     }
     .details{
         position: relative;

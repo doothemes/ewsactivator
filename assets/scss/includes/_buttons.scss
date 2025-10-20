@@ -1,7 +1,7 @@
 .button{
     width: auto;
     font-weight: 600;
-    padding: 10px 25px;
+    padding: .75rem 2rem;
     font-size: 1rem;
     border-radius: var(--ews-border-radius);
     border: 1px solid transparent;
@@ -19,17 +19,23 @@
         }
     }
     &.button-primary{
-        background-color: #fff;
-        border-color: #fff;
-        color: #111;
+        background-color: #fe2c55;
+        border-color: transparent;
+        color: rgba(255, 255, 255, 0.8);
         transition: all .3s ease;
         &:hover{
-            background-color: #f0f0f0;
-            border-color: #f0f0f0;
-            color: #111;
+            background-color: #ea284e;
+            border-color: #ea284e;
+            color: #ffffff;
+        }
+        &:active{
+            background-color: #db254a;
+            border-color: #fe2c55;
+            color: #ffffff;
         }
         &:disabled{
-            color: rgba(17, 17, 17, 0.7);
+            background-color: #b42d48;
+            color: rgba(255, 255, 255, 0.35);;
             cursor: default;
         }
     }
