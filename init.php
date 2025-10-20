@@ -7,7 +7,7 @@
 // Establecer la zona horaria
 date_default_timezone_set('America/Lima');
 // Establecer version
-define('EWS_VERSION', '1.0.30');
+define('EWS_VERSION', '1.0.31');
 // Clave pública y privada para cifrado/descifrado
 define('EWS_INSURANCE_CHAIN_PUBLIC', 'JPeW3YEuX7vPCDvKMbbnCPhvJsebn3NxwL9Dh61c8obg0Pd8Ciav7cXkRktFT66K');
 define('EWS_INSURANCE_CHAIN_PRIVATE', 'GBxMAGZ3mT85dAdZzmCbe7dLUUk6EDp7b24Qa7iJdhxj7BeE54rGb3edgBqBjXrp');
