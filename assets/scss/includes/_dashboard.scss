@@ -31,9 +31,13 @@ main.admin-wrap{
         .center{
             ul.menu{
                 list-style: none;
+                white-space: nowrap;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
                 li{
                     display: inline-flex;
-                    margin: 0 .3rem;
                     a{
                         color: var(--ews-text-icon);
                         padding: .2rem 0;

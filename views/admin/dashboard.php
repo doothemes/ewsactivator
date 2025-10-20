@@ -11,8 +11,8 @@
         </div>
         <div class="center">
             <ul class="menu">
-                <li><a href="#" id="target-register" data-target="register" class="tab">Registrar</a></li>
-                <li><a href="#" id="target-finder" data-target="finder" class="tab">Consultar</a></li>
+                <li><a href="#" id="target-register" data-target="register" class="tab">Crear</a></li>
+                <li><a href="#" id="target-finder" data-target="finder" class="tab">Buscar</a></li>
                 <li><a href="#" id="target-settings" data-target="settings" class="tab">Ajustes</a></li>
                 <li><a href="#" id="target-downloads" data-target="downloads" class="tab">Descargas</a></li>
             </ul>
