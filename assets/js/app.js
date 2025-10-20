@@ -15,34 +15,40 @@
     EWS.Header = function(){
         let lastScrollTop = 0;
         let scrollTimeout = null;
+        let isSticky = true;
+        const tolerance = 15; // píxeles mínimos para evitar parpadeos en móviles
+        const animDuration = 150; // duración de la animación en ms
         const $header = $("header.navigator");
-        const tolerance = 15; // píxeles mínimos antes de reaccionar
-        const delay = 25; // milisegundos de espera antes de aplicar el cambio
-        let isSticky = false;
+        // Manejador de scroll
         $(window).on("scroll touchmove", function () {
             const currentScroll = $(this).scrollTop();
+            // Ignora movimientos pequeños
             if(Math.abs(currentScroll - lastScrollTop) < tolerance) return;
+            // Cancelamos cualquier animación previa
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
-                if (currentScroll < lastScrollTop && !isSticky) {
-                // Scroll hacia arriba → mostrar
+                if (currentScroll > lastScrollTop && isSticky) {
+                // Scroll hacia abajo → desaparecer suavemente
                 $header.stop(true, true).animate(
-                    { opacity: 1, top: 0 },
-                    { duration: 300, easing: "swing" }
+                    { top: "-100px", opacity: 0 },
+                    animDuration,
+                    "swing",
+                    function () {
+                    $header.removeClass("sticky"); // se quita después de la animación
+                    }
                 );
-                $header.addClass("sticky");
-                isSticky = true;
-                } else if (currentScroll > lastScrollTop && isSticky) {
-                    // Scroll hacia abajo → ocultar
-                    $header.stop(true, true).animate(
-                        { opacity: 0, top: "-100px" },
-                        { duration: 300, easing: "swing" }
+                isSticky = false;
+                } else if (currentScroll < lastScrollTop && !isSticky) {
+                    // Scroll hacia arriba → volver a aparecer suavemente
+                    $header.addClass("sticky").css({ top: "-100px", opacity: 0 }).stop(true, true).animate(
+                        { top: 0, opacity: 1 },
+                        animDuration,
+                        "swing"
                     );
-                    $header.removeClass("sticky");
-                    isSticky = false;
+                    isSticky = true;
                 }
                 lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-            }, delay);
+            }, 50); // pequeño debounce para mayor suavidad
         });
     }
 
@@ -146,12 +152,13 @@
         // Restablecer descuentos a 0%
         function resetDiscounts() {
             let resetTimer;
-            // Efecto visual de reseteo
-            $("#order-details").addClass("onload");
-            $("#fieldset-payment").removeClass("shake");
-            // Restablecer después de un segundo
+            const $fieldset = $("#fieldset-payment");
+            const $order = $("#order-details");
+            // Aplicamos efecto visual de reseteo
+            $order.addClass("onload");
+            $fieldset.removeClass("shake");
             clearTimeout(resetTimer);
-            resetTimer = setTimeout(function() {
+            resetTimer = setTimeout(function () {
                 // Reiniciar valores visuales
                 $("#summary-discount").text("- 0.00");
                 $("#discount-percentage").text("0%");
@@ -160,22 +167,40 @@
                 const subtotal = parseFloat($("#summary-subtotal").text()) || 0;
                 $("#summary-total").text(subtotal.toFixed(2));
                 $("#field-payment").val(subtotal.toFixed(2));
-                // Quitar efecto visual
-                $("#order-details").removeClass("onload");
-                $("#fieldset-payment").addClass("shake").find("input[type=number]").focus();
+                // Quitar efecto visual de "onload"
+                $order.removeClass("onload");
+                // Calcular la posición para centrar el fieldset
+                const fieldsetTop = $fieldset.offset().top;
+                const fieldsetHeight = $fieldset.outerHeight();
+                const windowHeight = $(window).height();
+                const scrollTo = fieldsetTop - (windowHeight / 2) + (fieldsetHeight / 2);
+                // Scroll suave al centro
+                $("html, body").stop(true).animate({ scrollTop: scrollTo }, 500, "swing", function () {
+                    // Luego del scroll, aplicamos shake y focus
+                    $fieldset.addClass("shake").find("input[type=number]").focus();
+                });
             }, 350);
         }
 
         // Resaltar un fieldset específico
         function highligthtFieldset(fieldsetId, inputType = "number") {
             let highlightTimer;
-            $("#fieldset-"+fieldsetId).addClass("fadein").removeClass("shake");
+            const $fieldset = $("#fieldset-" + fieldsetId);
+            const fieldsetTop = $fieldset.offset().top;
+            const fieldsetHeight = $fieldset.outerHeight();
+            const windowHeight = $(window).height();
+            // Calculamos el scroll ideal para centrar el elemento
+            const scrollTo = fieldsetTop - (windowHeight / 2) + (fieldsetHeight / 2);
+            // Animamos el scroll al centro
+            $("html, body").stop(true).animate({ scrollTop: scrollTo }, 500, "swing");
+            // Efecto visual
+            $fieldset.addClass("fadein").removeClass("shake");
             clearTimeout(highlightTimer);
-            highlightTimer = setTimeout(function() {
-                $("#fieldset-"+fieldsetId).removeClass("fadein").find(`input[type=${inputType}]`).focus();
+            highlightTimer = setTimeout(function () {
+              $fieldset.removeClass("fadein").find(`input[type=${inputType}]`).focus();
             }, 350);
         }
-
+          
         // Actualización de precios y resumen del pedido
         function updatePrice(){
             const officeVal = $("#field-product-office").val();
