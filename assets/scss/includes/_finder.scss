@@ -209,6 +209,7 @@ button.view-data-key{
         flex-direction: column;
         gap: .15rem;
         code.license-key{
+            color: var(--ews-text-hover);
             font-size: 1.3rem;
         }
         p.wrn{

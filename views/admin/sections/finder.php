@@ -116,6 +116,16 @@
             <a href="#">Actualizar datos</a>
         </div>
     </h3>
+    <div class="comments-form">
+        <div class="comment-writer">
+            <textarea id="comment-text" class="comment-text" placeholder="Escribe un comentario..."></textarea>
+        </div>
+        <div class="comment-button">
+            <button id="submit-comment" type="submit" rows="1" class="submit-comment">
+                <i class="material-icons">send</i>
+            </button>
+        </div>
+    </div>
     <div class="comments-list">
         <div id="" class="comment-item">
             <div class="avatar">
@@ -143,16 +153,6 @@
                 <div class="author">Erick Meza <span class="time">Hace 3 horas</span></div>
                 <div class="text">¡Gracias por tu comentario! Nos alegra saber que el proceso fue satisfactorio. Si necesitas ayuda, estamos aquí.</div>
             </div>
-        </div>
-    </div>
-    <div class="comments-form">
-        <div class="comment-writer">
-            <textarea id="comment-text" class="comment-text" placeholder="Escribe un comentario..."></textarea>
-        </div>
-        <div class="comment-button">
-            <button id="submit-comment" type="submit" rows="1" class="submit-comment">
-                <i class="material-icons">send</i>
-            </button>
         </div>
     </div>
 </div>
