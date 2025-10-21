@@ -90,6 +90,7 @@
                 line-height: 1.25;
                 transition: height 0.15s ease-in-out;
                 overflow-y: hidden;
+                will-change: height;
                 resize: none;
                 &::placeholder{
                     color: var(--ews-text-disabled);
