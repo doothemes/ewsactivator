@@ -333,6 +333,29 @@
             }
             lastTap = now;
         });
+
+        // Auto-height smooth textarea handler
+        $(document).on("input", "textarea.autoheight", function () {
+            const baseHeight = 62; // default height in pixels
+            const el = this;
+
+            // Reset height before measuring to get accurate scrollHeight
+            el.style.height = "auto";
+
+            // Determine new height based on content
+            const newHeight = el.scrollHeight > baseHeight ? el.scrollHeight : baseHeight;
+
+            // Apply height smoothly (with mobile support)
+            el.style.height = newHeight + "px";
+        });
+
+        // Adjust height for prefilled textareas on load
+        $("textarea.autoheight").each(function () {
+            const baseHeight = 62;
+            this.style.height = "auto";
+            this.style.height = (this.scrollHeight > baseHeight ? this.scrollHeight : baseHeight) + "px";
+        });
+
     }
 
     EWS.AdminTabs = function(){

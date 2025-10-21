@@ -118,7 +118,7 @@
     </h3>
     <div class="comments-form">
         <div class="comment-writer">
-            <textarea id="comment-text" class="comment-text" placeholder="Escribe un comentario..."></textarea>
+            <textarea id="comment-text" class="comment-text autoheight" placeholder="Escribe un comentario..."></textarea>
         </div>
         <div class="comment-button">
             <button id="submit-comment" type="submit" rows="1" class="submit-comment">
@@ -147,10 +147,10 @@
         </div>
         <div id="" class="comment-item">
             <div class="avatar">
-                <img src="https://www.gravatar.com/avatar/c37bce76b3e6d1124e4542a7887cd077" alt="emeza">
+                <img src="https://www.gravatar.com/avatar/59d5f0cb371103fb3a1addaf8e401c89" alt="emeza">
             </div>
             <div class="content">
-                <div class="author">Erick Meza <span class="time">Hace 3 horas</span></div>
+                <div class="author">Brenda Mayuri <span class="time">Hace 3 horas</span></div>
                 <div class="text">¡Gracias por tu comentario! Nos alegra saber que el proceso fue satisfactorio. Si necesitas ayuda, estamos aquí.</div>
             </div>
         </div>
