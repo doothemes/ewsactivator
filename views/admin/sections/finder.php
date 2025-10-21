@@ -104,11 +104,55 @@
         </div>
     </div>
 
-    <div class="view-order-comments">
-        {{comentarios}}
-    </div>
-
 </div>
 
-
-<div class="results"></div>
+<div class=" comments">
+    <h3 class="heading">
+        <div class="text">
+            <i class="material-icons">chat_bubble</i>
+            <span>Notas y comentarios</span>
+        </div>
+        <div class="controls">
+            <a href="#">Actualizar datos</a>
+        </div>
+    </h3>
+    <div class="comments-list">
+        <div id="" class="comment-item">
+            <div class="avatar">
+                <img src="https://www.gravatar.com/avatar/c37bce76b3e6d1124e4542a7887cd077" alt="emeza">
+            </div>
+            <div class="content">
+                <div class="author">Erick Meza <span class="time">Hace 3 horas</span></div>
+                <div class="text">Excelente proceso de activación, muy rápido y sin complicaciones.</div>
+            </div>
+        </div>
+        <div id="" class="comment-item">
+            <div class="avatar">
+                <img src="https://www.gravatar.com/avatar/1561a4563ad81dcef8a2e651f184c4d0" alt="emeza">
+            </div>
+            <div class="content">
+                <div class="author">Erick Meza <span class="time">Hace 3 horas</span></div>
+                <div class="text">¡Gracias por tu comentario! Nos alegra saber que el proceso fue satisfactorio. Si necesitas ayuda, estamos aquí.</div>
+            </div>
+        </div>
+        <div id="" class="comment-item">
+            <div class="avatar">
+                <img src="https://www.gravatar.com/avatar/c37bce76b3e6d1124e4542a7887cd077" alt="emeza">
+            </div>
+            <div class="content">
+                <div class="author">Erick Meza <span class="time">Hace 3 horas</span></div>
+                <div class="text">¡Gracias por tu comentario! Nos alegra saber que el proceso fue satisfactorio. Si necesitas ayuda, estamos aquí.</div>
+            </div>
+        </div>
+    </div>
+    <div class="comments-form">
+        <div class="comment-writer">
+            <textarea id="comment-text" class="comment-text" placeholder="Escribe un comentario..."></textarea>
+        </div>
+        <div class="comment-button">
+            <button id="submit-comment" type="submit" rows="1" class="submit-comment">
+                <i class="material-icons">send</i>
+            </button>
+        </div>
+    </div>
+</div>
