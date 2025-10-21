@@ -334,28 +334,20 @@
             lastTap = now;
         });
 
-        // Auto-height smooth textarea handler
+        // Auto resize for all textarea elements with class="autoheight"
         $(document).on("input", "textarea.autoheight", function () {
-            const baseHeight = 62; // default height in pixels
-            const el = this;
-
-            // Reset height before measuring to get accurate scrollHeight
-            el.style.height = "auto";
-
-            // Determine new height based on content
-            const newHeight = el.scrollHeight > baseHeight ? el.scrollHeight : baseHeight;
-
-            // Apply height smoothly (with mobile support)
-            el.style.height = newHeight + "px";
-        });
-
-        // Adjust height for prefilled textareas on load
-        $("textarea.autoheight").each(function () {
-            const baseHeight = 62;
+            // Reset height to auto to correctly recalculate scrollHeight
             this.style.height = "auto";
-            this.style.height = (this.scrollHeight > baseHeight ? this.scrollHeight : baseHeight) + "px";
+            
+            // Adjust height according to content
+            this.style.height = this.scrollHeight + "px";
         });
 
+        // Optional: trigger on page load to fit any pre-filled textareas
+        $("textarea.autoheight").each(function () {
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
+        });
     }
 
     EWS.AdminTabs = function(){
