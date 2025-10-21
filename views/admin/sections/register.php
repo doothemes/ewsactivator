@@ -96,7 +96,7 @@
                         <option value="MICROSOFT_365_EDUCATION">Microsoft 365 Education</option>
                         <option value="MICROSOFT_365_GOVERNMENT">Microsoft 365 Government</option>
                         <option value="MICROSOFT_365_NONPROFIT">Microsoft 365 Nonprofit</option>
-                        <option value="MICROSOFT_365_E3_E5">Microsoft 365 E3 / E5</option>
+                        <option value="MICROSOFT_365_E3_E5">Microsoft 365 E3/E5</option>
                     </optgroup>
                 </select>
             </fieldset>

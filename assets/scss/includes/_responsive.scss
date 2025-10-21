@@ -1,5 +1,25 @@
 @media only screen and (max-width: 600px){
 
+    .view-order-details{
+        padding: 1rem;
+        .vod-box{
+            .view-data{
+                flex-direction: column;
+                gap: .1rem;
+            }
+        }
+    }
+    button.view-data-key{
+        padding: 1rem;
+        .left{
+            code.license-key{
+                font-size: 1rem;
+            }
+        }
+        .right{
+            display: none;
+        }
+    }
     main.admin-wrap{
         header.navigator{
             .left{

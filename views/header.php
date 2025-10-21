@@ -30,7 +30,77 @@
         var ews_app = {
             "base_url" : "/",
             "ajax_url" : "/ajax/",
-            "time_zone" : "America/Lima"
+            "time_zone" : "America/Lima",
+            "microsoft_office" : {
+                // Office 2016 Products
+                "OFFICE_HOME_STUDENT_2016" : "Office Home & Student 2016",
+                "OFFICE_HOME_BUSSINESS_2016" : "Office Home & Business 2016",
+                "OFFICE_PRO_2016" : "Office Professional 2016",
+                "OFFICE_PRO_PLUS_2016" : "Office Professional Plus 2016",
+                "OFFICE_STANDARD_2016" : "Office Standard 2016",
+                "OFFICE_EDUCATION_2016" : "Office Education 2016",
+                "OFFICE_365_2016" : "Office 365 (2016)",
+                // Office 2019 Products
+                "OFFICE_HOME_STUDENT_2019" : "Office Home & Student 2019",
+                "OFFICE_HOME_BUSSINESS_2019" : "Office Home & Business 2019",
+                "OFFICE_PRO_2019" : "Office Professional 2019",
+                "OFFICE_PRO_PLUS_2019" : "Office Professional Plus 2019",
+                "OFFICE_STANDARD_2019" : "Office Standard 2019",
+                "OFFICE_LTSC_STANDARD_2019" : "Office LTSC Standard 2019",
+                "OFFICE_LTSC_PRO_PLUS_2019" : "Office LTSC Professional Plus 2019",
+                "OFFICE_365_2019" : "Office 365 (2019)",
+                // Office 2021 Products
+                "OFFICE_HOME_STUDENT_2021" : "Office Home & Student 2021",
+                "OFFICE_HOME_BUSSINESS_2021" : "Office Home & Business 2021",
+                "OFFICE_PRO_2021" : "Office Professional 2021",
+                "OFFICE_LTSC_STANDARD_2021" : "Office LTSC Standard 2021",
+                "OFFICE_LTSC_PRO_PLUS_2021" : "Office LTSC Professional Plus 2021",
+                "OFFICE_FOR_MAC_2021" : "Office for Mac 2021",
+                "MICROSOFT_365_2021" : "Microsoft 365 (2021)",
+                // Office 2024 Products
+                "OFFICE_HOME_STUDENT_2024" : "Office Home & Student 2024",
+                "OFFICE_HOME_BUSSINESS_2024" : "Office Home & Business 2024",
+                "OFFICE_PRO_2024" : "Office Professional 2024",
+                "OFFICE_LTSC_STANDARD_2024" : "Office LTSC Standard 2024",
+                "OFFICE_LTSC_PRO_PLUS_2024" : "Office LTSC Professional Plus 2024",
+                "OFFICE_FOR_MAC_2024" : "Office for Mac 2024",
+                "MICROSOFT_365_2024" : "Microsoft 365 (2024)",
+                // Microsft 365 Subscriptions
+                "MICROSOFT_365_PERSONAL" : "Microsoft 365 Personal",
+                "MICROSOFT_365_FAMILY" : "Microsoft 365 Family",
+                "MICROSOFT_365_BUSSINESS_BASIC" : "Microsoft 365 Business Basic",
+                "MICROSOFT_365_BUSSINESS_STANDARD" : "Microsoft 365 Business Standard",
+                "MICROSOFT_365_BUSSINESS_PREMIUM" : "Microsoft 365 Business Premium",
+                "MICROSOFT_365_APPS_BUSSINESS" : "Microsoft 365 Apps for Business",
+                "MICROSOFT_365_APPS_ENTERPRISE" : "Microsoft 365 Apps for Enterprise",
+                "MICROSOFT_365_EDUCATION" : "Microsoft 365 Education",
+                "MICROSOFT_365_GOVERNMENT" : "Microsoft 365 Government",
+                "MICROSOFT_365_NONPROFIT" : "Microsoft 365 Nonprofit",
+                "MICROSOFT_365_E3_E5" : "Microsoft 365 E3/E5"
+            },
+            "microsoft_windows" : {
+                // Windows 11 Editions
+                "WINDOWS_11_HOME" : "Windows 11 Home",
+                "WINDOWS_11_PRO" : "Windows 11 Pro",
+                "WINDOWS_11_PRO_WORKSTATION" : "Windows 11 Pro for Workstations",
+                "WINDOWS_11_PRO_EDUCATION" : "Windows 11 Pro Education",
+                "WINDOWS_11_EDUCATION" : "Windows 11 Education",
+                "WINDOWS_11_ENTERPRISE" : "Windows 11 Enterprise",
+                "WINDOWS_11_ENTERPRISE_LTSC" : "Windows 11 Enterprise LTSC",
+                "WINDOWS_11_SE" : "Windows 11 SE",
+                "WINDOWS_11_IOT_ENTERPRISE" : "Windows 11 IoT Enterprise",
+                "WINDOWS_11_N_KN" : "Windows 11 N/KN",
+                // Windows 10 Editions
+                "WINDOWS_10_HOME" : "Windows 10 Home",
+                "WINDOWS_10_PRO" : "Windows 10 Pro",
+                "WINDOWS_10_PRO_WORKSTATION" : "Windows 10 Pro for Workstations",
+                "WINDOWS_10_PRO_EDUCATION" : "Windows 10 Pro Education",
+                "WINDOWS_10_EDUCATION" : "Windows 10 Education",
+                "WINDOWS_10_ENTERPRISE" : "Windows 10 Enterprise",
+                "WINDOWS_10_ENTERPRISE_LTSC" : "Windows 10 Enterprise LTSC",
+                "WINDOWS_10_IOT_ENTERPRISE" : "Windows 10 IoT Enterprise",
+                "WINDOWS_10_N_KN" : "Windows 10 N/KN"
+            }
         };
         // Prevent caching of AJAX requests
         $(document).ready(function(){
