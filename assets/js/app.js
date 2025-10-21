@@ -12,6 +12,7 @@
         EWS.AdminRegisterActivator();
     });
 
+    // Manejador del header navegacional
     EWS.Header = function(){
         let lastScrollTop = 0;
         let scrollTimeout = null;
@@ -52,33 +53,10 @@
         });
     }
 
+    // Manejador del formulario de registro en el admin
     EWS.AdminRegisterActivator = function(){
 
         var $registerForm = "#ews-admin-register-license";
-
-        function formResetter(){
-            let resetTimer;
-            const form = $($registerForm);
-            // Efecto visual de reseteo
-            form.find("div.oder-summary").addClass("onload");
-            // Restablecer después de un segundo
-            clearTimeout(resetTimer);
-            resetTimer = setTimeout(function() {
-                // Reiniciar todos los campos del formulario
-                form.find("input[type=text], input[type=email], input[type=hidden]").val("");
-                form.find("input[name=total_payment], input[name=total_expenditure]").val("0.00");
-                // Reiniciar selector de productos
-                form.find("select[name=microsoft_office").val("").trigger("change");
-                form.find("select[name=microsoft_windows").val("").trigger("change");
-                // Restablecer valores visibles de resumen
-                $("#summary-subtotal").text("0.00");
-                $("#summary-discount").text("- 0.00");
-                $("#discount-percentage").text("0%");
-                $("#summary-total").text("0.00");
-                // Quitar efecto visual
-                form.find("div.oder-summary").removeClass("onload");
-            }, 500);
-        }
         
         $(document).on("submit", $registerForm, function (e){
             e.preventDefault();
@@ -104,7 +82,7 @@
 
                     $("#target-finder").trigger("click");
 
-                    formResetter();
+                    formResetter($registerForm);
 
                     Button.prop("disabled", false).text(ButtonText);
                 }
@@ -116,7 +94,7 @@
             // Prevenir el reseteo por defecto
             e.preventDefault();
             // Llamar a la función de reseteo personalizada
-            formResetter();
+            formResetter($registerForm);
         });
     }
 

@@ -22,6 +22,21 @@ class PocketBase{
             $this->url = EWS_POCKETBASE_API_URL; // Usar URL pública
         }
     }
+    
+    /**
+     * Destructor y limpieza de recursos.
+     */
+    public function __destruct(){
+        $this->api_token = null;
+    }
+
+    /**
+     * Previene la clonación de la instancia PocketBase.
+     * @throws Exception Always throws an exception to prevent cloning.
+     */
+    public function __clone(){
+        throw new Exception("Cloning PocketBase instances is not allowed.");
+    }
 
     /**
      * Verifica si un puerto está abierto en un host dado.
@@ -335,30 +350,3 @@ class PocketBase{
 
     }
 }
-/*
-
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-
-
-echo json_encode(PocketBase::activated_license('bfd6696cd9833474673d57bc4a6a4513'));
-
-
-echo json_encode(PocketBase::add_license([
-    'email' => 'emeza@ews.pe',
-    'phone' => '51933585544',
-    'name' => 'Erick',
-    'surname' => 'Meza',
-    'ip_address' => $_SERVER['REMOTE_ADDR'] ?? '',
-    'device_details' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-    'product' => 'Office 2021',
-    'currency' => 'PEN',
-    'payment_method' => 'YAPE',
-    'payment_description' => '',
-    'total_expenditure' => 0,
-    'total_payment' => 35,
-    'count_requests' => 1,
-    'count_activations' => 0,
-    'limit_activations' => 10,
-    'active' => true,
-]));*/

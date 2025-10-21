@@ -23,12 +23,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon_16.png?v=<?=EWS_VERSION;?>">
     <link rel="stylesheet" id="ews-activator-app-style" href="/assets/css/app.css?ver=<?=EWS_VERSION;?>" type="text/css" media="all" />
     <script type="text/javascript" src="/assets/js/jquery.js?ver=3.7.1" id="jquery-core-js"></script>
+    <script type="text/javascript" src="/assets/js/functions.js?ver=<?=EWS_VERSION;?>" id="ews-activator-functions-core-js"></script>
     <script type="text/javascript" src="/assets/js/app.js?ver=<?=EWS_VERSION;?>" id="ews-activator-app-core-js"></script>
     <script type="text/javascript" id="ews-activator-app-extra">
         // EWS Activator Application Configuration
         var ews_app = {
             "base_url" : "/",
             "ajax_url" : "/ajax/",
+            "time_zone" : "America/Lima"
         };
         // Prevent caching of AJAX requests
         $(document).ready(function(){

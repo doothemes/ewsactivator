@@ -345,7 +345,6 @@ class AjaxHandler{
             exit(json_encode(['success' => false, 'message' => 'El gasto no puede ser negativo ni mayor al total del pago.']));
 
         }
-
         // Sanitizar el resto de campos y preparar datos
         $firstname = trim($_REQUEST['firstname'] ?? '');
         $lastname = trim($_REQUEST['lastname'] ?? '');
@@ -354,7 +353,6 @@ class AjaxHandler{
         $payment_method = trim($_REQUEST['payment_method'] ?? 'YAPE');
         $payment_description = trim($_REQUEST['payment_description'] ?? '');
         $activations_limit = intval($_REQUEST['limit_activations'] ?? 10);
-
         // Crear nueva licencia en PocketBase
         $new_license = PocketBase::add_license([
             'email' => $user_email,
@@ -381,7 +379,7 @@ class AjaxHandler{
                     'uid' => bin2hex(random_bytes(16)),
                     'date' => date('Y-m-d H:i:s'),
                     'username' => $_SESSION['ews_auth']['username'] ?? 'system',
-                    'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'John Doe',
+                    'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'EWS Activator',
                     'comment' => 'Licencia registrada exitosamente.',
                     'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
                 ]
@@ -392,7 +390,7 @@ class AjaxHandler{
             $message = $new_license['message'] ?? 'Error al crear la licencia.';
             exit(json_encode(['success' => false, 'message' => $message]));
         }
-
+        // Preparar datos para el correo electrónico
         $email_data = [
             'name' => $firstname,
             'lastname' => $lastname,
