@@ -8,8 +8,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="dark light">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#000000">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#020202">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020202">
     <title><?=$title;?></title>
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <link rel="manifest" href="/assets/web/manifest.json?v=<?=EWS_VERSION;?>">

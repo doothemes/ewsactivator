@@ -299,6 +299,7 @@ class PocketBase{
                 'date' => date('Y-m-d H:i:s'),
                 'username' => 'system',
                 'fullname' => 'EWS Activator',
+                'gravatar' => md5(strtolower(trim('unknown'))),
                 'comment' => 'Se alcanzó el límite de activaciones de licencias',
                 'ip_address' => trim($ip_address)
             ]);
@@ -316,6 +317,7 @@ class PocketBase{
             'date' => date('Y-m-d H:i:s'),
             'username' => 'system',
             'fullname' => 'EWS Activator',
+            'gravatar' => md5(strtolower(trim('unknown'))),
             'comment' => 'Licencia activada exitosamente.',
             'ip_address' => trim($ip_address)
         ]);

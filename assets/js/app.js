@@ -57,33 +57,84 @@
     EWS.AdminRegisterActivator = function(){
 
         var $registerForm = "#ews-admin-register-license";
+        var $searchForm = "#ews-admin-search-license";
+
+
+        $(document).on("click", ".copy-command", function (){
+            // Get the command from the clicked button
+            const command = $(this).data("command");
+            if(!command){
+                console.warn("copy-command: No data-command attribute found.");
+                return;
+            }
+            // Use Clipboard API (modern and reliable)
+            navigator.clipboard.writeText(command).then(() => {
+                console.log("Command copied to clipboard:", command);
+                // Optional: small UI feedback
+                const $btn = $(this);
+                const originalText = $btn.find("span").text();
+                $btn.find("span").text("¡Copiado!");
+                setTimeout(() => $btn.find("span").text(originalText), 2000);
+            }).catch(err => {
+                console.error("Failed to copy command:", err);
+            });
+        });
+
+        $(document).on("click", "#update-order-information", function(e){
+            e.preventDefault();
+            let updaterTimer;
+            const button = $(this);
+            const license = button.data("key");
+            button.prop("disabled", true).text("Actualizando..");
+            $("#search-input").val(license);
+            clearTimeout(updaterTimer);
+            updaterTimer = setTimeout(function() {
+                $($searchForm).trigger("submit");
+            }, 50);
+        });
+
+
+        $(document).on("submit", $searchForm, function(e){
+            e.preventDefault();
+            const form = $(this);
+            const Button = form.find('button[type="submit"]');
+            const Keyword = form.find('input[name="keyword"]').val().trim();
+            Button.prop("disabled", true);
+            if(Keyword.length < 3){
+                Button.prop("disabled", false);
+                return;
+            }
+            const orderContainer = $("#view-result-order");
+            const commentsContainer = $("#view-result-comments");
+            orderContainer.html("").addClass("onload");
+            commentsContainer.html("");
+            $.getJSON(ews_app.ajax_url+`get_license?key=${Keyword}`, function(response) {
+                if(response.success == true){
+                    generateViewResult(response.data);
+                }
+                Button.prop("disabled", false);
+            });
+            return;
+        });
         
         $(document).on("submit", $registerForm, function (e){
             e.preventDefault();
             const form = $(this);
             const Button = form.find('button[type="submit"]');
             const ButtonText = Button.text();
-            
             Button.prop("disabled", true).text("Registrando..");
             form.find("div.oder-summary").addClass("onload");
-
             $.ajax({
                 url: ews_app.ajax_url+"license_creator",
                 type: "POST",
                 dataType: "json",
                 data: form.serialize(),
                 success: function(response){
-                   
                     if(response.success == true){
-
-                    }else{
-
+                        $("#target-finder").trigger("click");
+                        generateViewResult(response.data);
+                        formResetter($registerForm);
                     }
-
-                    $("#target-finder").trigger("click");
-
-                    formResetter($registerForm);
-
                     Button.prop("disabled", false).text(ButtonText);
                 }
             });

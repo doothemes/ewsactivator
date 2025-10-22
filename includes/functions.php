@@ -282,3 +282,15 @@ function mail_message(string $file_name = '', string $extension = 'html'): strin
     // Retornar el contenido del archivo
     return file_get_contents($file_path);
 }
+
+
+/**
+ * Obtener la URL de Gravatar para un correo electrónico dado
+ * @param string $email Dirección de correo electrónico
+ * @return string URL de la imagen de Gravatar
+ */
+function get_gravatar_URL(string $email = ''): string {
+    $email_hash = md5(strtolower(trim($email)));
+    $gravatar_url = "https://www.gravatar.com/avatar/{$email_hash}?s=90&d=https%3A%2F%2Fi.imgur.com%2FQdNXN3p.png&r=g";
+    return $gravatar_url;
+}

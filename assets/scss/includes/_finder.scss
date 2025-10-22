@@ -43,23 +43,13 @@
         }
     }
 }
-
 .response{
-
-    h1.title{
-        font-size: 1.5rem;
-        font-weight: normal;
-        margin-bottom: 1.5rem;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        i.material-icons{
-            font-size: 1.5rem;
-            color: var(--ews-text-icon);
-        }
+    position: relative;
+    &.onload{
+        min-height: 160px;
+        border-radius: var(--ews-border-radius);
     }
 }
-
 .view-order-details{
     display: flex;
     flex-direction: column;

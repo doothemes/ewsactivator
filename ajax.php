@@ -380,6 +380,7 @@ class AjaxHandler{
                     'date' => date('Y-m-d H:i:s'),
                     'username' => $_SESSION['ews_auth']['username'] ?? 'system',
                     'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'EWS Activator',
+                    'gravatar' => md5(strtolower(trim($_SESSION['ews_auth']['email'] ?? 'unknown'))),
                     'comment' => 'Licencia registrada exitosamente.',
                     'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
                 ]
@@ -416,14 +417,12 @@ class AjaxHandler{
     private function get_license(){
         // Verificar si el usuario está autenticado
         if(is_logged_in() === false){
-            http_response_code(401);
             exit(json_encode(['success' => false, 'message' => 'Requiere autenticación.']));
         }
         // Obtener y sanitizar clave de licencia
         $license_key = trim($_REQUEST['key'] ?? '');
         // Validar clave de licencia
         if($license_key === ''){
-            http_response_code(400);
             exit(json_encode(['success' => false, 'message' => 'Falta la clave de licencia.']));
         }
         // Obtener y validar la licencia en PocketBase

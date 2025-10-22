@@ -4,6 +4,11 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    position: relative;
+    &.onload{
+        min-height: 160px;
+        border-radius: var(--ews-border-radius);
+    }
     h3.heading{
         font-size: 1.3rem;
         font-weight: normal;
@@ -19,8 +24,11 @@
             align-items: center;
             gap: .5rem;
         }
-        a{
-            font-size: .85rem;
+        .controls{
+            a.button{
+                font-size: .85rem;
+                padding: .35rem 1rem;
+            }
         }
     }
     .comments-list{
@@ -88,9 +96,7 @@
                 color: var(--ews-text-primary);
                 font-size: 1rem;
                 line-height: 1.25;
-                transition: height 0.15s ease-in-out;
                 overflow-y: hidden;
-                will-change: height;
                 resize: none;
                 &::placeholder{
                     color: var(--ews-text-disabled);
