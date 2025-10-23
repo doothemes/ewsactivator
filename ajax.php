@@ -29,7 +29,8 @@ class AjaxHandler{
             'auth_login',
             'auth_logout',
             'license_creator',
-            'get_license'
+            'get_license',
+            'post_comment'
         ];
     }
 
@@ -379,8 +380,9 @@ class AjaxHandler{
                     'uid' => bin2hex(random_bytes(16)),
                     'date' => date('Y-m-d H:i:s'),
                     'username' => $_SESSION['ews_auth']['username'] ?? 'system',
-                    'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'EWS Activator',
-                    'gravatar' => md5(strtolower(trim($_SESSION['ews_auth']['email'] ?? 'unknown'))),
+                    'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'Sistema de Licencias',
+                    'icon' => $_SESSION['ews_auth'] ? 'person' : 'settings',
+                    'status' => 'success',
                     'comment' => 'Licencia registrada exitosamente.',
                     'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
                 ]
@@ -421,12 +423,44 @@ class AjaxHandler{
         }
         // Obtener y sanitizar clave de licencia
         $license_key = trim($_REQUEST['key'] ?? '');
+        $license_key = extract_first_md5($license_key);
         // Validar clave de licencia
         if($license_key === ''){
             exit(json_encode(['success' => false, 'message' => 'Falta la clave de licencia.']));
         }
         // Obtener y validar la licencia en PocketBase
         exit(json_encode(PocketBase::get_license($license_key)));
+    }
+
+    /**
+     * Agrega un comentario a una licencia en PocketBase
+     * Requiere que el usuario esté autenticado.
+     * @return void
+     */
+    private function post_comment(){
+        // Verificar si el usuario está autenticado
+        if(is_logged_in() === false){
+            exit(json_encode(['success' => false, 'message' => 'Requiere autenticación.']));
+        }
+        // Obtener y sanitizar datos de entrada
+        $license_cll = trim($_REQUEST['license_cll'] ?? '');
+        $license_sct = trim($_REQUEST['license_sct'] ?? '');
+        $license_uid = trim($_REQUEST['license_uid'] ?? '');
+        $comment_txt = trim($_REQUEST['comment_txt'] ?? '');
+        if($license_uid === '' || $comment_txt === ''){
+            exit(json_encode(['success' => false, 'message' => 'Faltan datos para agregar el comentario.']));
+        }
+        // Agregar el comentario a la licencia en PocketBase
+        exit(json_encode(PocketBase::post_comment($license_uid, [
+            'uid' => bin2hex(random_bytes(16)),
+            'date' => date('Y-m-d H:i:s'),
+            'username' => $_SESSION['ews_auth']['username'] ?? 'system',
+            'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'Sistema de Licencias',
+            'icon' => $_SESSION['ews_auth'] ? 'person' : 'settings',
+            'status' => trim($_REQUEST['comment_status'] ?? 'info'),
+            'comment' => $comment_txt,
+            'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
+        ])));
     }
 }
 

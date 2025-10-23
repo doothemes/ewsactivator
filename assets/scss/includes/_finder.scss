@@ -49,6 +49,18 @@
         min-height: 160px;
         border-radius: var(--ews-border-radius);
     }
+    .no-results{
+        font-weight: 300;
+        font-size: 1.3rem;
+        text-align: center;
+        color: var(--ews-text-icon);
+        background-color: var(--ews-background-paper);
+        border-radius: var(--ews-border-radius);
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
 .view-order-details{
     display: flex;

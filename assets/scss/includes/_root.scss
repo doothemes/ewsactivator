@@ -21,5 +21,15 @@
     --ews-width-container: 850px;
     --ews-border-radius: .5rem;
 
+    --ews-info-bg: #15232b;
+    --ews-success-bg: #17231b;
+    --ews-warning-bg: #2b2415;;
+    --ews-error-bg: #2b1515;
+
+    --ews-info-txt: #0288d1;
+    --ews-success-txt: #1eb952;
+    --ews-warning-txt: #f9a825;
+    --ews-error-txt: #d32f2f;
+
     --ews-svg-loader: url(../svg/loader.svg);
 }

@@ -1,5 +1,11 @@
 @media only screen and (max-width: 600px){
 
+    .comments{
+        .comments-list{
+            padding: 0 .5rem;
+        }
+    }
+
     .view-order-details{
         padding: 1rem;
         .vod-box{
@@ -107,7 +113,7 @@
         }
     }
 }
-@media only screen and (max-width: 400px){
+@media only screen and (max-width: 430px){
     main.auth-wrap{
         .inside{
             form{

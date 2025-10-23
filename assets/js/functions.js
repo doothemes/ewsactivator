@@ -61,7 +61,7 @@ function formResetter(formID){
  * @returns 
  */
 function getGravatarURL(md5Hash) {
-    return `https://www.gravatar.com/avatar/${md5Hash}?s=90&d=https%3A%2F%2Fi.imgur.com%2FQdNXN3p.png`;
+    return `https://www.gravatar.com/avatar/${md5Hash}?s=90&d=https%3A%2F%2Fi.imgur.com%2FgK1XylW.png`;
 }
 
 /**
@@ -88,8 +88,8 @@ function generateViewResult(data){
             comment_COUNT += 1;
             comments_HTML += `
                 <div id="commnet_${comment.uid}" class="comment-item">
-                    <div class="avatar">
-                        <img src="${getGravatarURL(GravatarHASH)}" alt="${comment.username}">
+                    <div class="avatar ${comment.status}">
+                        <i class="icon material-icons">${comment.icon}</i>
                     </div>
                     <div class="content">
                         <div class="author" data-ip="${comment.ip_address}" data-username="${comment.username}">
@@ -170,7 +170,7 @@ function generateViewResult(data){
                 <button data-command="irm ${window.location.origin}/c/${data.id} |iex" class="view-data-key copy-command">
                     <div class="left">
                         <code class="license-key">${data.id}</code>
-                        <p class="wrn">Guarda esta clave en un lugar seguro.</p>
+                        <p class="wrn">Acumula <strong>${(data.count_requests+1)}</strong> peticiones API registradas.</p>
                     </div>
                     <div class="right">
                         <span>Copiar Comando</span>
@@ -219,7 +219,7 @@ function generateViewResult(data){
     let comment_HTML = `
         <h3 class="heading">
             <div class="text">
-                <i class="material-icons">chat_bubble</i>
+                <i class="material-icons">mode_comment</i>
                 <span>Notas y comentarios (${comment_COUNT})</span>
             </div>
             <div class="controls">
@@ -227,16 +227,47 @@ function generateViewResult(data){
             </div>
         </h3>
         <div class="comments-form">
-            <div class="comment-writer">
-                <textarea id="comment-text" class="comment-text autoheight" placeholder="Escribe un comentario..."></textarea>
-            </div>
-            <div class="comment-button">
-                <button id="submit-comment" type="submit" rows="1" class="submit-comment">
-                    <i class="material-icons">send</i>
-                </button>
-            </div>
+            <form id="ews-admin-post-comment-license" method="POST" class="post-comment-form" data-order="${data.id}">
+                <div class="writer-side">
+                    <div class="comment-writer">
+                        <textarea id="comment-text" name="comment_txt" class="comment-text autoheight" placeholder="Escribir comentario.."></textarea>
+                        <input type="hidden" name="license_uid" value="${data.id}">
+                        <input type="hidden" name="license_sct" value="${data.secret}">
+                        <input type="hidden" name="license_cll" value="${data.collectionId}">
+                    </div>
+                    <div class="comment-button">
+                        <button id="submit-comment" type="submit" rows="1" class="submit-comment">
+                            <i class="material-icons">send</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="status-side">
+                    <div class="indicator">
+                        <label class="commnet-status checked none">
+                            <span class="status-none">Normal</span>
+                            <input type="radio" name="comment_status" value="none" checked>
+                        </label>
+                        <label class="commnet-status success">
+                            <span class="status-success">Éxito</span>
+                            <input type="radio" name="comment_status" value="success">
+                        </label>
+                        <label class="commnet-status info">
+                            <span class="status-info">Info</span>
+                            <input type="radio" name="comment_status" value="info">
+                        </label>
+                        <label class="commnet-status warning">
+                            <span class="status-warning">Advertencia</span>
+                            <input type="radio" name="comment_status" value="warning">
+                        </label>
+                        <label class="commnet-status error">
+                            <span class="status-error">Error</span>
+                            <input type="radio" name="comment_status" value="error">
+                        </label>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="comments-list">${comments_HTML || `<div class="no-comments">No hay comentarios para mostrar.</div>`}</div>
+        <div id="comments-list-${data.id}" class="comments-list">${comments_HTML || `<div class="no-comments">No hay comentarios para mostrar.</div>`}</div>
     `;
     // --- Insertar en el DOM ---
     orderContainer.removeClass("onload").html(order_HTML);

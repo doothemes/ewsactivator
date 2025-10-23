@@ -294,3 +294,19 @@ function get_gravatar_URL(string $email = ''): string {
     $gravatar_url = "https://www.gravatar.com/avatar/{$email_hash}?s=90&d=https%3A%2F%2Fi.imgur.com%2FQdNXN3p.png&r=g";
     return $gravatar_url;
 }
+
+/**
+ * Extraer la primera cadena MD5 encontrada en el texto
+ *
+ * @param string $text El texto a analizar.
+ * @return string|null La primera cadena MD5 encontrada en minúsculas, o null si no se encuentra ninguna.
+ */
+function extract_first_md5(string $text): ?string {
+    // Regex para para encontrar una cadena de 32 caracteres hexadecimales
+    $pattern = '/(?<![A-Fa-f0-9])([A-Fa-f0-9]{32})(?![A-Fa-f0-9])/';
+    // Buscar la primera coincidencia y retornarla en minúsculas
+    if(preg_match($pattern, $text, $matches)){
+        return strtolower($matches[1]);
+    }
+    return null;
+}

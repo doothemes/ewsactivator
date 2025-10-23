@@ -104,7 +104,7 @@ class PocketBase{
         $result = json_decode($response, true);
         // Validar estructura del resultado
         if($http_code !== 200 || empty($result['token'])){
-            throw new Exception('Failed to obtain PocketBase token.');
+            return null;
         }
         // Guardar token para futuras solicitudes
         $this->api_token = $result['token'];
@@ -298,9 +298,10 @@ class PocketBase{
                 'uid' => bin2hex(random_bytes(16)),
                 'date' => date('Y-m-d H:i:s'),
                 'username' => 'system',
-                'fullname' => 'EWS Activator',
-                'gravatar' => md5(strtolower(trim('unknown'))),
-                'comment' => 'Se alcanzó el límite de activaciones de licencias',
+                'fullname' => 'Sistema de Licencias',
+                'icon' => 'settings',
+                'status' => 'warning',
+                'comment' => 'Activación fallida, se alcanzó el límite de activaciones de la licencia.',
                 'ip_address' => trim($ip_address)
             ]);
             // Actualizar solo el contador de solicitudes
@@ -308,7 +309,7 @@ class PocketBase{
             // Notificar que se alcanzó el límite de activaciones
             return [
                 'success' => false,
-                'message' => 'Se alcanzó el límite de activaciones de licencias.'
+                'message' => 'Activación fallida, se alcanzó el límite de activaciones de la licencia.'
             ];
         }
         // Registrar comentario de activación
@@ -316,8 +317,9 @@ class PocketBase{
             'uid' => bin2hex(random_bytes(16)),
             'date' => date('Y-m-d H:i:s'),
             'username' => 'system',
-            'fullname' => 'EWS Activator',
-            'gravatar' => md5(strtolower(trim('unknown'))),
+            'fullname' => 'Sistema de Licencias',
+            'icon' => 'settings',
+            'status' => 'success',
             'comment' => 'Licencia activada exitosamente.',
             'ip_address' => trim($ip_address)
         ]);
@@ -347,8 +349,87 @@ class PocketBase{
         ];
     }
 
-    public static function send_email(string $to = '', string $subjet = '', string $message = ''): array{
+    /**
+     * Publicar un comentario en una licencia específica.
+     * @param string $license_uid Identificador único de la licencia.
+     * @param array $comment_data Datos del comentario a publicar.
+     * @return array Resultado de la operación.
+     */
+    public static function post_comment(string $license_uid = '', array $comment_data = []): array{
+        // Instanciar cliente PocketBase
+        $pb = new self();
+        // Validar entrada
+        if(empty($license_uid) || empty($comment_data)){
+            return [
+                'success' => false,
+                'message' => 'Se requieren datos de licencia y comentario.'
+            ];
+        }
+        // Endpoint base
+        $endpoint = '/api/collections/ews_windows_activator/records/'.urlencode($license_uid);
+        // Obtener datos actuales de la licencia
+        $license_data = $pb->request('GET', $endpoint);
+        // Manejo de errores del request GET
+        if(!isset($license_data['id'])){
+            return [
+                'success' => false,
+                'message' => $license_data['message'] ?? 'Licencia no encontrada.'
+            ];
+        }
+        // Obtener comentarios actuales
+        $comments = $license_data['comments'] ?? [];
+        // Agregar nuevo comentario al inicio
+        array_unshift($comments, $comment_data);
+        // Actualizar comentarios en la licencia
+        $response = $pb->request('PATCH', $endpoint, ['comments' => $comments]);
+        // Manejo de errores de actualización
+        if(isset($response['error']) || isset($response['code'])){
+            return [
+                'success' => false,
+                'message' => $response['message'] ?? 'Error al actualizar la licencia.'
+            ];
+        }
+        // Éxito total
+        return [
+            'success' => true,
+            'message' => 'Comentario agregado exitosamente.',
+            'count_comments' => count($response['comments'] ?? []),
+            'new_comment' => $response['comments'][0] ?? $comment_data
+        ];
+    }
 
-
+    /**
+     * Actualiza los datos de una licencia específica.
+     * @param string $license_uid Identificador único de la licencia.
+     * @param array $new_data Nuevos datos para actualizar la licencia.
+     * @return array Resultado de la operación.
+     */
+    public static function update_license(string $license_uid = '', array $new_data = []): array{
+        // Instanciar cliente PocketBase
+        $pb = new self();
+        // Validar entrada
+        if(empty($license_uid) || empty($new_data)){
+            return [
+                'success' => false,
+                'message' => 'Se requieren datos de licencia y nuevos datos.'
+            ];
+        }
+        // Endpoint base
+        $endpoint = '/api/collections/ews_windows_activator/records/'.urlencode($license_uid);
+        // Actualizar datos en la licencia
+        $response = $pb->request('PATCH', $endpoint, $new_data);
+        // Manejo de errores de actualización
+        if(isset($response['error']) || isset($response['code'])){
+            return [
+                'success' => false,
+                'message' => $response['message'] ?? 'Error al actualizar la licencia.'
+            ];
+        }
+        // Éxito total
+        return [
+            'success' => true,
+            'message' => 'Licencia actualizada exitosamente.',
+            'data' => $response
+        ];
     }
 }

@@ -58,6 +58,27 @@
 
         var $registerForm = "#ews-admin-register-license";
         var $searchForm = "#ews-admin-search-license";
+        var $commentForm = "#ews-admin-post-comment-license";
+
+        $(document).on("submit", $commentForm, function(e){
+            e.preventDefault();
+            const form = $(this);
+
+            console.log(form.serialize());
+
+        });
+
+        $(document).on("click", ".status-side .commnet-status", function () {
+            $(this).closest(".indicator").find(".commnet-status").removeClass("checked");
+            $(this).addClass("checked");
+            $(this).find('input[type="radio"]').prop("checked", true);
+        });
+
+        $('input[name="comment_status"]').on("change", function () {
+            const $indicator = $(this).closest(".indicator");
+            $indicator.find(".commnet-status").removeClass("checked");
+            $(this).closest(".commnet-status").addClass("checked");
+        });
 
 
         $(document).on("click", ".copy-command", function (){
@@ -98,23 +119,34 @@
             e.preventDefault();
             const form = $(this);
             const Button = form.find('button[type="submit"]');
-            const Keyword = form.find('input[name="keyword"]').val().trim();
-            Button.prop("disabled", true);
-            if(Keyword.length < 3){
-                Button.prop("disabled", false);
-                return;
-            }
+            const Input = form.find('input[name="keyword"]');
+            const Keyword = Input.val().trim();
             const orderContainer = $("#view-result-order");
             const commentsContainer = $("#view-result-comments");
+            Button.prop("disabled", true);
+            form.parent().removeClass("shake");
+            if(Keyword.length < 32){
+                Button.prop("disabled", false);
+                form.parent().addClass("shake");
+                return;
+            }
             orderContainer.html("").addClass("onload");
             commentsContainer.html("");
-            $.getJSON(ews_app.ajax_url+`get_license?key=${Keyword}`, function(response) {
+            $.getJSON(ews_app.ajax_url+`get_license?key=${Keyword}`, function(response){
                 if(response.success == true){
                     generateViewResult(response.data);
+                    Input.val("");
+                }else{
+                    form.parent().addClass("shake");
+                    orderContainer.html(`<div class="no-results bounce">${response.message}</div>`).removeClass("onload");
                 }
                 Button.prop("disabled", false);
             });
             return;
+        });
+
+        $(document).on("submit", $searchForm, function(e){
+            e.preventDefault();
         });
         
         $(document).on("submit", $registerForm, function (e){

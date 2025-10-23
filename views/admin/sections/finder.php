@@ -7,5 +7,7 @@
     </form>
 </div>
 
-<div id="view-result-order" class="response"></div>
+<div id="view-result-order" class="response">
+    <div class="no-results">Inicia una busqueda</div>
+</div>
 <div id="view-result-comments" class="comments"></div>
