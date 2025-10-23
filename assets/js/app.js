@@ -10,6 +10,12 @@
         EWS.AdminTabs();
         EWS.AdminRegisterActivatorHelper();
         EWS.AdminRegisterActivator();
+
+        // Función para actualizar los tiempos "hace X minutos"
+        $(function(){
+            updateTimes();
+            setInterval(updateTimes, 10000);
+        });
     });
 
     // Manejador del header navegacional

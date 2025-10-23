@@ -40,31 +40,36 @@ function timeAgoLima(dateInput) {
     const limaOffset = -5 * 60; // UTC-5 in minutes
     const localNow = new Date(now.getTime() + (now.getTimezoneOffset() + limaOffset) * 60000);
     const localDate = new Date(date.getTime() + (date.getTimezoneOffset() + limaOffset) * 60000);
-  
     // Calculate difference in seconds
     const diff = Math.floor((localNow - localDate) / 1000);
-  
     if (diff < 0) return "En el futuro 👀";
     if (diff < 5) return "Justo ahora";
     if (diff < 60) return `hace ${diff}s`;
-  
     const minutes = Math.floor(diff / 60);
     if (minutes < 60) return `hace ${minutes}m`;
-  
     const hours = Math.floor(minutes / 60);
     if (hours < 24) return `hace ${hours}h`;
-  
     const days = Math.floor(hours / 24);
     if (days < 7) return `hace ${days}d`;
-  
     const weeks = Math.floor(days / 7);
     if (weeks < 4) return `hace ${weeks} semana${weeks > 1 ? "s" : ""}`;
-  
     const months = Math.floor(days / 30);
     if (months < 12) return `hace ${months} mes${months > 1 ? "es" : ""}`;
-  
     const years = Math.floor(days / 365);
     return `hace ${years} año${years > 1 ? "s" : ""}`;
+}
+
+/**
+ * Actualiza todos los elementos con la clase "time" para mostrar el tiempo transcurrido en formato "hace X".
+ * Utiliza la función timeAgoLima para el cálculo.
+ */
+function updateTimes() {
+    $(".time").each(function(){
+        const dateTime = $(this).data("time");
+        if(dateTime){
+            $(this).text(timeAgoLima(dateTime));
+        }
+    });
 }
   
 
