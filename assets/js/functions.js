@@ -27,6 +27,49 @@ function convertTime(datetime){
 }
 
 /**
+ * Converts a UTC date to a "time ago" format adjusted to Lima, Peru timezone.
+ * @param {string|Date} dateInput - UTC date string or Date object.
+ * @returns {string} Human readable relative time in Spanish.
+ */
+function timeAgoLima(dateInput) {
+    // Parse input as Date object
+    const date = new Date(dateInput);
+  
+    // Get current time in Lima (UTC-5)
+    const now = new Date();
+    const limaOffset = -5 * 60; // UTC-5 in minutes
+    const localNow = new Date(now.getTime() + (now.getTimezoneOffset() + limaOffset) * 60000);
+    const localDate = new Date(date.getTime() + (date.getTimezoneOffset() + limaOffset) * 60000);
+  
+    // Calculate difference in seconds
+    const diff = Math.floor((localNow - localDate) / 1000);
+  
+    if (diff < 0) return "En el futuro 👀";
+    if (diff < 5) return "Justo ahora";
+    if (diff < 60) return `hace ${diff}s`;
+  
+    const minutes = Math.floor(diff / 60);
+    if (minutes < 60) return `hace ${minutes}m`;
+  
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `hace ${hours}h`;
+  
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `hace ${days}d`;
+  
+    const weeks = Math.floor(days / 7);
+    if (weeks < 4) return `hace ${weeks} semana${weeks > 1 ? "s" : ""}`;
+  
+    const months = Math.floor(days / 30);
+    if (months < 12) return `hace ${months} mes${months > 1 ? "es" : ""}`;
+  
+    const years = Math.floor(days / 365);
+    return `hace ${years} año${years > 1 ? "s" : ""}`;
+}
+  
+
+
+/**
  * Establece los valores predeterminados de los campos del formulario de registro.
  * @param {string} form
  * @param {object} defaults - Objeto con los valores predeterminados.
@@ -93,7 +136,7 @@ function generateViewResult(data){
                     </div>
                     <div class="content">
                         <div class="author" data-ip="${comment.ip_address}" data-username="${comment.username}">
-                            ${comment.fullname} <span class="time">${comment.date}</span>
+                            ${comment.fullname} <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
                         </div>
                         <div class="text">${comment.comment}</div>
                     </div>
@@ -193,7 +236,7 @@ function generateViewResult(data){
                     </div>
                     <div class="item">
                         <span class="label">Última actualización</span>
-                        <span class="value">${convertTime(data.updated)}</span>
+                        <span class="value">${timeAgoLima(data.updated)}</span>
                     </div>
                 </div>
             </div>
@@ -227,7 +270,7 @@ function generateViewResult(data){
             </div>
         </h3>
         <div class="comments-form">
-            <form id="ews-admin-post-comment-license" method="POST" class="post-comment-form" data-order="${data.id}">
+            <form id="ews-admin-post-comment-license" class="post-comment-form" data-order="${data.id}">
                 <div class="writer-side">
                     <div class="comment-writer">
                         <textarea id="comment-text" name="comment_txt" class="comment-text autoheight" placeholder="Escribir comentario.."></textarea>

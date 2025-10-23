@@ -57,3 +57,8 @@ a{
 .hidden{
     display: none !important;
 }
+.icon-loading{
+    display: inline-block;
+    animation: spin 1.2s linear infinite;
+    -webkit-animation: spin 1.2s linear infinite;
+}

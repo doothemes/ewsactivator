@@ -63,9 +63,45 @@
         $(document).on("submit", $commentForm, function(e){
             e.preventDefault();
             const form = $(this);
+            const OrderID = form.data("order");
+            const Button = form.find(`button[type="submit"]`);
+            const Textarea = form.find(`textarea[name="comment_txt"]`);
+            const CommentsList = $("#comments-list-"+OrderID);
 
-            console.log(form.serialize());
+            if(Textarea.val().trim().length < 3){
+                Textarea.focus();
+                return;
+            }
+            
+            Button.prop("disabled", true).find("i.material-icons").addClass("icon-loading").text("sync");
 
+            $.ajax({
+                url: ews_app.ajax_url+"post_comment",
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function(response){
+                    if(response.success == true){
+                        const comment = response.new_comment;
+                        var new_comment = `
+                            <div id="commnet_${comment.uid}" class="comment-item bounce">
+                                <div class="avatar ${comment.status}">
+                                    <i class="icon material-icons">${comment.icon}</i>
+                                </div>
+                                <div class="content">
+                                    <div class="author" data-ip="${comment.ip_address}" data-username="${comment.username}">
+                                        ${comment.fullname} <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
+                                    </div>
+                                    <div class="text">${comment.comment}</div>
+                                </div>
+                            </div>
+                        `;
+                        CommentsList.prepend(new_comment);
+                        Textarea.val("").trigger("input");
+                    }
+                    Button.prop("disabled", false).find("i.material-icons").removeClass("icon-loading").text("send");
+                }
+            });
         });
 
         $(document).on("click", ".status-side .commnet-status", function () {

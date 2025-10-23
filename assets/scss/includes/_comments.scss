@@ -36,6 +36,7 @@
     .comments-list{
         display: flex;
         flex-direction: column;
+        position: relative;
         .comment-item{
             padding: 1rem 0;
             border-bottom: solid 1px var(--ews-border-default);
@@ -80,12 +81,12 @@
                 .author{
                     display: flex;
                     flex-direction: row;
-                    gap: .5rem;
+                    gap: .65rem;
                     font-size: 1rem;
                     font-weight: 600;
                     span.time{
-                        font-size: .85rem;
-                        color: var(--ews-text-secondary);
+                        font-size: .8rem;
+                        color: var(--ews-text-disabled);
                         font-weight: normal;
                     }
                 }
@@ -187,6 +188,10 @@
                 &::placeholder{
                     color: var(--ews-text-disabled);
                 }
+                &:disabled{
+                    color: var(--ews-text-disabled);
+                    cursor: wait;
+                }
             }
         }
         .comment-button{
@@ -206,7 +211,7 @@
                     color: var(--ews-text-hover);
                 }
                 &:active{
-                    color: var(--ews-text-primary);
+                    color: var(--ews-primary);
                 }
             }
         }
