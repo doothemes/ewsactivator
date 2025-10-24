@@ -73,14 +73,14 @@
             const Button = form.find(`button[type="submit"]`);
             const Textarea = form.find(`textarea[name="comment_txt"]`);
             const CommentsList = $("#comments-list-"+OrderID);
-
             if(Textarea.val().trim().length < 3){
                 Textarea.focus();
                 return;
             }
-            
+            form.find("div.writer-side").removeClass("shake");
+            form.find("div.comments-notices").addClass("hidden").text("");
+            CommentsList.find(".no-comments").remove();
             Button.prop("disabled", true).find("i.material-icons").addClass("icon-loading").text("sync");
-
             $.ajax({
                 url: ews_app.ajax_url+"post_comment",
                 type: "POST",
@@ -104,10 +104,29 @@
                         `;
                         CommentsList.prepend(new_comment);
                         Textarea.val("").trigger("input");
+                        $("#comment-counter").text(response.count_comments);
+                    }else{
+                        form.find("div.writer-side").addClass("shake");
+                        form.find("div.comments-notices").removeClass("hidden").text(response.message);
                     }
                     Button.prop("disabled", false).find("i.material-icons").removeClass("icon-loading").text("send");
                 }
             });
+        });
+
+        $(document).on("input", "#comment-text", function (){
+            const maxLength = ews_app.comment_max_length;
+            const currentLength = $(this).val().length;
+            // Actualizamos el contador
+            $("#character-counter").text(currentLength);
+            // Opcional: cambiar color al acercarse al límite
+            if(currentLength >= maxLength){
+                $("#character-counter").css("color", "#d9534f");
+            } else if (currentLength > maxLength * 0.8) {
+                $("#character-counter").css("color", "#f0ad4e");
+            } else {
+                $("#character-counter").css("color", "");
+            }
         });
 
         $(document).on("click", ".status-side .commnet-status", function () {

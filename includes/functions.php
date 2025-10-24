@@ -310,3 +310,33 @@ function extract_first_md5(string $text): ?string {
     }
     return null;
 }
+
+/**
+ * Format user comment with WhatsApp-like rich text
+ *
+ * @param string $text  The raw user comment
+ * @return string       The formatted HTML
+ */
+function ews_format_comment(string $text): string{
+    // Escape HTML to prevent XSS
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    // Monospace block ```texto```
+    $text = preg_replace('/```([^`]+)```/s', '<pre><code>$1</code></pre>', $text);
+    // Inline code `texto`
+    $text = preg_replace('/`([^`]+)`/', '<code>$1</code>', $text);
+    // Bold *texto*
+    $text = preg_replace('/\*([^*]+)\*/', '<b>$1</b>', $text);
+    // Italic _texto_
+    $text = preg_replace('/_([^_]+)_/', '<i>$1</i>', $text);
+    // Strikethrough ~texto~
+    $text = preg_replace('/~([^~]+)~/', '<s>$1</s>', $text);
+    // Detect URLs and convert to clickable links
+    $text = preg_replace(
+        '/(https?:\/\/[^\s<]+)/i',
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+        $text
+    );
+    // Convert line breaks to <br>
+    $text = nl2br($text);
+    return $text;
+}

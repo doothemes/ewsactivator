@@ -31,6 +31,7 @@
             "base_url" : "/",
             "ajax_url" : "/ajax/",
             "time_zone" : "America/Lima",
+            "comment_max_length" : <?=EWS_COMMENTS_MAX_LENGTH;?>,
             "microsoft_office" : {
                 // Office 2016 Products
                 "OFFICE_HOME_STUDENT_2016" : "Office Home & Student 2016",

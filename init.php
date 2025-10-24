@@ -7,7 +7,7 @@
 // Establecer la zona horaria
 date_default_timezone_set('America/Lima');
 // Establecer version
-define('EWS_VERSION', '1.0.48');
+define('EWS_VERSION', '1.0.51');
 // Clave pública y privada para cifrado/descifrado
 define('EWS_INSURANCE_CHAIN_PUBLIC', 'JPeW3YEuX7vPCDvKMbbnCPhvJsebn3NxwL9Dh61c8obg0Pd8Ciav7cXkRktFT66K');
 define('EWS_INSURANCE_CHAIN_PRIVATE', 'GBxMAGZ3mT85dAdZzmCbe7dLUUk6EDp7b24Qa7iJdhxj7BeE54rGb3edgBqBjXrp');
@@ -20,6 +20,7 @@ define('EWS_PASSWORD_RESET_EXPIRATION', 30 * 60); // Enlace de restablecimiento 
 define('EWS_COOKIE_EXPIRATION', 30 * 24 * 60 * 60); // Cookie válida por 30 días en segundos
 define('EWS_REMEMBER_ME_EXPIRATION', 30 * 24 * 60 * 60); // "Recordarme" válido por 30 días en segundos
 define('EWS_PASSWORD_MIN_LENGTH', 8); // Longitud mínima de la contraseña
+define('EWS_COMMENTS_MAX_LENGTH', 300); // Numero maximo de caracteres en los comentarios.
 define('EWS_PASSWORD_REQUIRE_SPECIAL', true); // Requiere caracteres especiales en la contraseña
 define('EWS_ROOT_PATH', __DIR__); // Ruta raíz del proyecto
 define('EWS_INCLUDES_PATH', EWS_ROOT_PATH . '/includes'); // Ruta de includes

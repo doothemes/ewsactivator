@@ -241,7 +241,7 @@ function generateViewResult(data){
                     </div>
                     <div class="item">
                         <span class="label">Última actualización</span>
-                        <span class="value">${timeAgoLima(data.updated)}</span>
+                        <span class="value time" data-time="${data.updated}">${timeAgoLima(data.updated)}</span>
                     </div>
                 </div>
             </div>
@@ -256,8 +256,24 @@ function generateViewResult(data){
                         <span class="value">-${data.total_discount.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
                     </div>
                     <div class="order-data total">
-                        <span class="label">Total</span>
-                        <span class="value">${data.total_payment.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
+                        <span class="label">Total recibido</span>
+                        <span class="value total-payment">${data.total_payment.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
+                    </div>
+                </div>
+            </div>
+            <div class="vod-box">
+                <h3 class="title">
+                    <i class="material-icons">attach_money</i>
+                    <span>Resumen de venta</span>
+                </h3>
+                <div class="view-data order">
+                    <div class="order-data expenditure">
+                        <span class="label">Registro de gastos</span>
+                        <span class="value">${data.total_expenditure.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
+                    </div>
+                    <div class="order-data profit total">
+                        <span class="label">Registro de ganancia</span>
+                        <span class="value total-profit">+${data.total_profit.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
                     </div>
                 </div>
             </div>
@@ -268,7 +284,7 @@ function generateViewResult(data){
         <h3 class="heading">
             <div class="text">
                 <i class="material-icons">mode_comment</i>
-                <span>Notas y comentarios (${comment_COUNT})</span>
+                <span>Notas y comentarios (<b id="comment-counter">${comment_COUNT}</b>)</span>
             </div>
             <div class="controls">
                 <a id="update-order-information" href="#" data-key="${data.id}" class="button button-secondary">Actualizar datos</a>
@@ -276,6 +292,7 @@ function generateViewResult(data){
         </h3>
         <div class="comments-form">
             <form id="ews-admin-post-comment-license" class="post-comment-form" data-order="${data.id}">
+                <div class="comments-notices hidden">{{notice_comment}}</div>
                 <div class="writer-side">
                     <div class="comment-writer">
                         <textarea id="comment-text" name="comment_txt" class="comment-text autoheight" placeholder="Escribir comentario.."></textarea>
@@ -312,6 +329,7 @@ function generateViewResult(data){
                             <input type="radio" name="comment_status" value="error">
                         </label>
                     </div>
+                    <div id="character-counter" class="character-counter">0</div>
                 </div>
             </form>
         </div>

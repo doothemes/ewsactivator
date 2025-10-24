@@ -54,7 +54,7 @@
         font-size: 1.3rem;
         text-align: center;
         color: var(--ews-text-icon);
-        background-color: var(--ews-background-paper);
+        background-color: var(--ews-background-notices);
         border-radius: var(--ews-border-radius);
         padding: 3rem 2rem;
         display: flex;
@@ -129,6 +129,12 @@
                             small.currency-badge{
                                 font-size: .85rem;
                                 color: var(--ews-text-icon);
+                            }
+                            &.total-payment{
+                                color: var(--ews-warning-txt);
+                            }
+                            &.total-profit{
+                                color: var(--ews-success-txt);
                             }
                         }
                     }

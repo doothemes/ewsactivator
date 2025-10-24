@@ -447,8 +447,15 @@ class AjaxHandler{
         $license_sct = trim($_REQUEST['license_sct'] ?? '');
         $license_uid = trim($_REQUEST['license_uid'] ?? '');
         $comment_txt = trim($_REQUEST['comment_txt'] ?? '');
+        // Verificar la existencia de las variables requeridas.
         if($license_uid === '' || $comment_txt === ''){
             exit(json_encode(['success' => false, 'message' => 'Faltan datos para agregar el comentario.']));
+        }
+        // Establecer un limite de caracteres en los comentarios antes de publicar.
+        $max_length = EWS_COMMENTS_MAX_LENGTH;
+        // Verificar que el limite de comentarios no se exceda.
+        if(strlen($comment_txt) > $max_length){
+            exit(json_encode(['success' => false, 'message' => "El comentario no puede superar los {$max_length} caracteres."]));
         }
         // Agregar el comentario a la licencia en PocketBase
         exit(json_encode(PocketBase::post_comment($license_uid, [
@@ -458,7 +465,7 @@ class AjaxHandler{
             'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'Sistema de Licencias',
             'icon' => $_SESSION['ews_auth'] ? 'person' : 'settings',
             'status' => trim($_REQUEST['comment_status'] ?? 'info'),
-            'comment' => $comment_txt,
+            'comment' => ews_format_comment($comment_txt),
             'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
         ])));
     }
