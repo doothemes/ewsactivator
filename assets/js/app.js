@@ -90,13 +90,14 @@
                     if(response.success == true){
                         const comment = response.new_comment;
                         var new_comment = `
-                            <div id="commnet_${comment.uid}" class="comment-item bounce">
+                            <div id="commnet_${comment.uid}" data-uid="${comment.uid}" class="comment-item delete-comment bounce">
                                 <div class="avatar ${comment.status}">
                                     <i class="icon material-icons">${comment.icon}</i>
                                 </div>
                                 <div class="content">
-                                    <div class="author" data-ip="${comment.ip_address}" data-username="${comment.username}">
-                                        ${comment.fullname} <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
+                                    <div class="author" data-ip="${comment.ip_address}">
+                                        <span class="name" data-username="${comment.username}">${comment.fullname}</span> 
+                                        <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
                                     </div>
                                     <div class="text">${comment.comment}</div>
                                 </div>
@@ -112,6 +113,14 @@
                     Button.prop("disabled", false).find("i.material-icons").removeClass("icon-loading").text("send");
                 }
             });
+        });
+
+        $(document).on("dblclick", ".delete-comment", function (){
+            const commentItem = $(this);
+            const commentUID = commentItem.data("uid");
+            //$("#commnet_"+commentUID).addClass("shake");
+
+            console.log(commentUID);
         });
 
         $(document).on("input", "#comment-text", function (){
@@ -140,7 +149,6 @@
             $indicator.find(".commnet-status").removeClass("checked");
             $(this).closest(".commnet-status").addClass("checked");
         });
-
 
         $(document).on("click", ".copy-command", function (){
             // Get the command from the clicked button
@@ -175,7 +183,6 @@
             }, 50);
         });
 
-
         $(document).on("submit", $searchForm, function(e){
             e.preventDefault();
             const form = $(this);
@@ -185,10 +192,10 @@
             const orderContainer = $("#view-result-order");
             const commentsContainer = $("#view-result-comments");
             Button.prop("disabled", true);
-            form.parent().removeClass("shake");
+            form.parent().addClass("hidden").removeClass("shake");
             if(Keyword.length < 32){
                 Button.prop("disabled", false);
-                form.parent().addClass("shake");
+                form.parent().removeClass("hidden").addClass("shake");
                 return;
             }
             orderContainer.html("").addClass("onload");
@@ -196,9 +203,10 @@
             $.getJSON(ews_app.ajax_url+`get_license?key=${Keyword}`, function(response){
                 if(response.success == true){
                     generateViewResult(response.data);
+                    form.parent().removeClass("hidden");
                     Input.val("");
                 }else{
-                    form.parent().addClass("shake");
+                    form.parent().removeClass("hidden").addClass("shake");
                     orderContainer.html(`<div class="no-results bounce">${response.message}</div>`).removeClass("onload");
                 }
                 Button.prop("disabled", false);

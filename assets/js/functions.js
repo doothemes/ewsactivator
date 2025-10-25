@@ -132,16 +132,16 @@ function generateViewResult(data){
     // Compilar vista de comentarios
     if($comments.length){
         $comments.forEach(comment => {
-            const GravatarHASH = comment.gravatar || "unknown";
             comment_COUNT += 1;
             comments_HTML += `
-                <div id="commnet_${comment.uid}" class="comment-item">
+                <div id="commnet_${comment.uid}" data-uid="${comment.uid}" class="comment-item delete-comment">
                     <div class="avatar ${comment.status}">
                         <i class="icon material-icons">${comment.icon}</i>
                     </div>
                     <div class="content">
-                        <div class="author" data-ip="${comment.ip_address}" data-username="${comment.username}">
-                            ${comment.fullname} <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
+                        <div class="author" data-ip="${comment.ip_address}">
+                            <span class="name" data-username="${comment.username}">${comment.fullname}</span> 
+                            <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
                         </div>
                         <div class="text">${comment.comment}</div>
                     </div>
@@ -256,7 +256,7 @@ function generateViewResult(data){
                         <span class="value">-${data.total_discount.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
                     </div>
                     <div class="order-data total">
-                        <span class="label">Total recibido</span>
+                        <span class="label">Total</span>
                         <span class="value total-payment">${data.total_payment.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
                     </div>
                 </div>
@@ -272,7 +272,7 @@ function generateViewResult(data){
                         <span class="value">${data.total_expenditure.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
                     </div>
                     <div class="order-data profit total">
-                        <span class="label">Registro de ganancia</span>
+                        <span class="label">Ganancia</span>
                         <span class="value total-profit">+${data.total_profit.toFixed(2) || "0.00"} <small class="currency-badge">${data.currency || "NA"}</small></span>
                     </div>
                 </div>

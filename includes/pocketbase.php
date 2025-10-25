@@ -186,7 +186,7 @@ class PocketBase{
             ];
         }
         // Crear registro en PocketBase
-        $response = $pb->request('POST','/api/collections/ews_windows_activator/records', $data);
+        $response = $pb->request('POST','/api/collections/ewsactivator_licenses/records', $data);
         // Si hubo error HTTP o JSON inválido
         if(isset($response['status']) && isset($response['message'])){
             return [
@@ -227,7 +227,7 @@ class PocketBase{
                 'message' => 'Se requiere código de licencia.'
             ];
         }
-        $license_data = $pb->request('GET', '/api/collections/ews_windows_activator/records/'.urlencode($license));
+        $license_data = $pb->request('GET', '/api/collections/ewsactivator_licenses/records/'.urlencode($license));
         // Manejo de errores del request GET
         if(!isset($license_data['id'])){
             return [
@@ -237,7 +237,7 @@ class PocketBase{
         }
         $counter_requests = (int)($license_data['count_requests'] ?? 0) + 1;
         // Actualizar contador de solicitudes
-        $pb->request('PATCH', '/api/collections/ews_windows_activator/records/'.urlencode($license), ['count_requests' => $counter_requests]);
+        $pb->request('PATCH', '/api/collections/ewsactivator_licenses/records/'.urlencode($license), ['count_requests' => $counter_requests]);
         // Éxito total
         return [
             'success' => true,
@@ -264,7 +264,7 @@ class PocketBase{
             ];
         }
         // Endpoint base
-        $endpoint = '/api/collections/ews_windows_activator/records/'.urlencode($license);
+        $endpoint = '/api/collections/ewsactivator_licenses/records/'.urlencode($license);
         // Obtener datos actuales de la licencia
         $license_data = $pb->request('GET', $endpoint);
         // Manejo de errores del request GET
@@ -366,7 +366,7 @@ class PocketBase{
             ];
         }
         // Endpoint base
-        $endpoint = '/api/collections/ews_windows_activator/records/'.urlencode($license_uid);
+        $endpoint = '/api/collections/ewsactivator_licenses/records/'.urlencode($license_uid);
         // Obtener datos actuales de la licencia
         $license_data = $pb->request('GET', $endpoint);
         // Manejo de errores del request GET
@@ -415,7 +415,7 @@ class PocketBase{
             ];
         }
         // Endpoint base
-        $endpoint = '/api/collections/ews_windows_activator/records/'.urlencode($license_uid);
+        $endpoint = '/api/collections/ewsactivator_licenses/records/'.urlencode($license_uid);
         // Actualizar datos en la licencia
         $response = $pb->request('PATCH', $endpoint, $new_data);
         // Manejo de errores de actualización
