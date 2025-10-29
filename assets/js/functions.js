@@ -205,8 +205,14 @@ function generateViewResult(data){
                         </div>
                     </div>
                     <div class="item">
-                        <span class="label">Activaciones</span>
-                        <span class="value"><b>${data.count_activations || "0"}</b> | <b>${data.limit_activations || "0"}</b> activaciones</span>
+                        <span class="label">Límite de activaciones</span>
+                        <span class="value activations">
+                            <div><b id="ews-activation-count">${data.count_activations || "0"}</b> | <b id="ews-activation-limit">${data.limit_activations || "0"}</b></div>
+                            <div class="activation-control">
+                                <button type="button" class="ews-activation-control" data-id="${data.id}" data-operation="add">+</button>
+                                <button type="button" class="ews-activation-control" data-id="${data.id}" data-operation="subtract">-</button>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>

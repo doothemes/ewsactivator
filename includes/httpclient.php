@@ -79,8 +79,7 @@ class HttpClient
      *
      * @return string|null
      */
-    private function pickLocalInterface(): ?string
-    {
+    private function pickLocalInterface(): ?string{
         if (empty($this->localInterfaces)) return null;
         return $this->localInterfaces[array_rand($this->localInterfaces)];
     }
@@ -99,8 +98,7 @@ class HttpClient
      *
      * @return array ['success'=>bool,'http_code'=>int,'error'=>?string,'body'=>?string,'user_agent'=>string,'used_interface'=>?string]
      */
-    public function request(string $url, array $opts = []): array
-    {
+    public function request(string $url, array $opts = []): array{
         $method = strtoupper($opts['method'] ?? 'GET');
         $retries = max(0, (int)($opts['retries'] ?? 1));
         $spoofXff = !empty($opts['spoof_xff']);

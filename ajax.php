@@ -30,6 +30,7 @@ class AjaxHandler{
             'auth_logout',
             'license_creator',
             'get_license',
+            'update_license',
             'post_comment'
         ];
     }
@@ -468,6 +469,64 @@ class AjaxHandler{
             'comment' => ews_format_comment($comment_txt),
             'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
         ])));
+    }
+
+    private function update_license(){
+        // Verificar si el usuario está autenticado
+        if(is_logged_in() === false){
+            exit(json_encode(['success' => false, 'message' => 'Requiere autenticación.']));
+        }
+        // Obtener y sanitizar la sección requerida
+        $section = trim($_REQUEST['section'] ?? '');
+        // Verificar la existencia de la sección requerida.
+        switch($section){
+            case 'creditator':
+                // Obtener y sanitizar datos de entrada
+                $operation = trim($_REQUEST['operation'] ?? '');
+                $licenseID = trim($_REQUEST['license_id'] ?? '');
+                // Validar datos requeridos
+                if($operation === '' || $licenseID === ''){
+                    exit(json_encode(['success' => false, 'message' => 'Faltan datos para actualizar la licencia.']));
+                }
+                // Validar operación
+                if(!in_array($operation, ['add', 'subtract'], true)){
+                    exit(json_encode(['success' => false, 'message' => 'Operación no válida para actualizar la licencia.']));
+                }
+                // Obtener la licencia desde PocketBase
+                $getLicense = PocketBase::get_license($licenseID);
+                // Verificar si se encontró la licencia
+                if(!isset($getLicense['data']['id'])){
+                    exit(json_encode(['success' => false, 'message' => 'Licencia no encontrada.']));
+                }
+                // Obtener el límite de activaciones y comentarios actuales
+                $countLimit = $getLicense['data']['limit_activations'] ?? 0;
+                $comments = $getLicense['data']['comments'] ?? [];
+                // Calcular nuevo límite de activaciones
+                $newLimit = ($operation == 'add') ? ($countLimit+1) : ($countLimit-1);
+                // Asegurar que el límite no sea negativo
+                if($newLimit < 0){
+                    exit(json_encode(['success' => false, 'message' => 'El límite de activaciones no puede ser negativo.']));
+                }
+                // Preparar el nuevo comentario
+                $newComment = ($operation == 'add') ? "*+1:* Límite de activaciones incrementado, Total *({$newLimit})*." : "*-1:* Límite de activaciones decrementado, Total *({$newLimit})*.";
+                // Agregar el nuevo comentario al inicio del array de comentarios
+                array_unshift($comments, [
+                    'uid' => bin2hex(random_bytes(16)),
+                    'date' => date('Y-m-d H:i:s'),
+                    'username' => $_SESSION['ews_auth']['username'] ?? 'system',
+                    'fullname' => $_SESSION['ews_auth']['fullname'] ?? 'Sistema de Licencias',
+                    'icon' => $_SESSION['ews_auth'] ? 'person' : 'settings',
+                    'status' => 'info',
+                    'comment' => ews_format_comment($newComment),
+                    'ip_address' => get_ip_address() ?? ($_SERVER['REMOTE_ADDR'] ?? '')
+                ]);
+                // Actualizar la licencia en PocketBase
+                exit(json_encode(PocketBase::update_license($licenseID, ['limit_activations' => $newLimit, 'comments' => $comments])));
+            break;
+
+            default:
+                exit(json_encode(['success' => false, 'message' => 'Sección no válida para actualizar la licencia.']));
+        }
     }
 }
 

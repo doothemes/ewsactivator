@@ -10,6 +10,7 @@
         EWS.AdminTabs();
         EWS.AdminRegisterActivatorHelper();
         EWS.AdminRegisterActivator();
+        EWS.Acreditator();
 
         // Función para actualizar los tiempos "hace X minutos"
         $(function(){
@@ -17,6 +18,78 @@
             setInterval(updateTimes, 10000);
         });
     });
+
+
+    EWS.Acreditator = function(){
+
+        
+        // Manejador de activaciones
+        $(document).on("click", ".ews-activation-control", function(e){
+            // Prevent default action
+            e.preventDefault();
+            // Establecer variables principales
+            const $button = $(this);
+            const $mainActivations = $("#ews-activation-count");
+            const $mainLimit = $("#ews-activation-limit");
+            const $countActivations = $mainActivations.text().trim();
+            const $countLimit = $mainLimit.text().trim();
+            const $licenseID = $button.data("id");
+            const CommentsList = $("#comments-list-"+$licenseID);
+            // Actualizar interfaz
+            $mainActivations.text("0");
+            $mainLimit.text("procesando...").addClass("flashit");
+            $button.parent().addClass("hidden").removeClass("shake");
+            CommentsList.find(".no-comments").remove();
+            // Enviar solicitud AJAX
+            $.ajax({
+                url: ews_app.ajax_url+"update_license",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    section: "creditator",
+                    license_id: $licenseID,
+                    operation: $button.data("operation")
+                },
+                success: function(response){
+                    // Reestablecer interfaz
+                    $button.parent().removeClass("hidden");
+                    // Actualizar datos según respuesta
+                    if(response.success == true){
+                        // Actualizar contadores
+                        $mainActivations.text(response.data.count_activations);
+                        $mainLimit.text(response.data.limit_activations).removeClass("flashit");
+                        // Agregar nuevo comentario
+                        const comment = response.data.comments[0];
+                        // Generar el nuevo comentario
+                        var new_comment = `
+                            <div id="commnet_${comment.uid}" data-uid="${comment.uid}" class="comment-item delete-comment bounce">
+                                <div class="avatar ${comment.status}">
+                                    <i class="icon material-icons">${comment.icon}</i>
+                                </div>
+                                <div class="content">
+                                    <div class="author" data-ip="${comment.ip_address}">
+                                        <span class="name" data-username="${comment.username}">${comment.fullname}</span> 
+                                        <span class="time" data-time="${comment.date}">${timeAgoLima(comment.date)}</span>
+                                    </div>
+                                    <div class="text">${comment.comment}</div>
+                                </div>
+                            </div>
+                        `;
+                        // Insertar el nuevo comentario en la lista
+                        CommentsList.prepend(new_comment);
+                        // Actualizar contador de comentarios
+                        $("#comment-counter").text(response.data.comments.length);
+                    }else{
+                        // Revertir contadores anteriores en caso de error
+                        $mainActivations.text($countActivations);
+                        $mainLimit.text($countLimit).removeClass("flashit");
+                        $button.parent().addClass("shake");
+                    }
+                }
+            });
+        });
+    };
+
 
     // Manejador del header navegacional
     EWS.Header = function(){
