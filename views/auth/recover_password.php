@@ -31,7 +31,7 @@
             <section id="auth-credentials-validate-otp">
                 <fieldset id="auth-otp" class="field text">
                     <i class="icon material-icons">dialpad</i>
-                    <input id="input-otp" class="input otp" type="text" name="otp" placeholder="Código de verificación" value="<?= $_GET['otp'] ?? ''; ?>">
+                    <input id="input-otp" class="input otp" type="number" name="otp" placeholder="Código de verificación" value="<?= $_GET['otp'] ?? ''; ?>">
                 </fieldset>
             </section>
             <section>
